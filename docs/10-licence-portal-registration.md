@@ -1,7 +1,7 @@
-# Registering Proview Team in the licence portal and dashboard (not done yet)
+# Registering Proview Team in the licence portal and dashboard (done 12 Nov 2026)
 
 Proview Team's side is ready: `hub_call`, `hub_plans` and `sso-login` are live in the `proview-team` Supabase project
-(`guiwijyxzyffnmiiwpcf`). The licence portal and the dashboard do not know the product yet. These are the changes,
+(`guiwijyxzyffnmiiwpcf`). These are the changes that were made in the licence portal and the dashboard,
 following what was done for QR Menu and Label.
 
 ## 1. Licence hub database (project `proview-licence`)
