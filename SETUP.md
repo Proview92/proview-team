@@ -21,10 +21,8 @@ A person sees only what the app allows them to see: pay rates, PINs, payslips, o
 A location works only while it has a licence (7 days of grace after a paid licence ends, none after a trial), exactly as in Bookings. New businesses start with no licence.
 
 ## Still to do by hand
-1. **Web address:** in GoDaddy add a CNAME record `team` pointing to `proview92.github.io`. Then add a file called `CNAME` containing `team.proviewcrm.co.uk` to this repository (or set the custom domain under Settings > Pages).
-2. **Supabase > Authentication > URL configuration:** set the Site URL to the app's address and add it to the redirect URLs, so confirmation and password-reset emails come back to the app.
-3. **Licence portal and dashboard:** register the product `team` (see `docs/10-licence-portal-registration.md`). Until then licences are set with SQL and `"sso"` stays `false` in `cloud.json`.
-4. **Email sending:** Supabase's built-in email is limited to a few messages an hour. Connect your own SMTP (for example Resend) under Authentication > Emails before real customers sign up.
+1. **Licence portal and dashboard:** register the product `team` (see `docs/10-licence-portal-registration.md`). Until then licences are set with SQL and `"sso"` stays `false` in `cloud.json`.
+2. **Email sending:** Supabase's built-in email is limited to a few messages an hour. Connect your own SMTP (for example Resend) under Authentication > Emails before real customers sign up.
 
 ## Rebuilding the database from scratch
 Run `supabase/schema.sql` in the SQL editor, put the master email in section 11, then deploy the two functions:
