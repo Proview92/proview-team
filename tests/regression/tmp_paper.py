@@ -1,0 +1,15 @@
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox']);pg=b.new_page(viewport={'width':1440,'height':900})
+    errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
+    pg.goto('file:///home/claude/employee/index.html');pg.wait_for_timeout(700)
+    pg.evaluate("()=>{document.documentElement.setAttribute('data-theme','dark');A.demoLoad();go('rota');A.rotaCsv()}");pg.wait_for_timeout(500)
+    pg.screenshot(path='/tmp/paper1.png')
+    print('scroll needed:',pg.evaluate("()=>{const w=document.querySelector('.ppwrap');return [w.scrollHeight,w.clientHeight]}"))
+    pg.evaluate("()=>{closeModal();document.documentElement.setAttribute('data-theme','light');go('s-company')}");pg.wait_for_timeout(400)
+    pg.evaluate("()=>{setColors({main:'#0f766e'})}");pg.wait_for_timeout(200)
+    pg.evaluate("()=>{A.setc({k:'s-company|Regional'});}");pg.wait_for_timeout(300)
+    pg.screenshot(path='/tmp/set1.png')
+    pg.evaluate("()=>{A.setall({v:'1'})}");pg.wait_for_timeout(300)
+    pg.screenshot(path='/tmp/set2.png')
+    print(errs); b.close()

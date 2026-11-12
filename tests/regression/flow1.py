@@ -1,0 +1,46 @@
+import sys
+from playwright.sync_api import sync_playwright
+w=int(sys.argv[1]) if len(sys.argv)>1 else 1280
+h=int(sys.argv[2]) if len(sys.argv)>2 else 800
+with sync_playwright() as p:
+    b=p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--no-sandbox'])
+    pg=b.new_page(viewport={'width':w,'height':h})
+    errs=[]
+    pg.on('pageerror',lambda e:errs.append('PAGEERR '+str(e)))
+    pg.on('console',lambda m:errs.append('CONSOLE '+m.text) if m.type=='error' and 'fonts.g' not in m.text and 'ERR_' not in m.text else None)
+    pg.goto('file:///home/claude/employee/index.html'); pg.wait_for_timeout(300); pg.evaluate("S=seedDemo();S.ui={};migrate();save(true);render()"); pg.wait_for_timeout(150)
+    pg.evaluate("A.loginAs({id:'u3'})"); pg.wait_for_timeout(200)
+    print('page',pg.evaluate("U.page"), pg.evaluate("me().name"))
+    def txt(n=200): return pg.evaluate("document.querySelector('#main').innerText.slice(0,%d).replace(/\\n/g,' | ')"%n)
+    pg.evaluate("go('clock')"); pg.wait_for_timeout(200)
+    print('clock0:',txt(160))
+    pg.click('[data-a=clk][data-k=in]'); pg.wait_for_timeout(300)
+    print('after in:',txt(200), '| toast:',pg.evaluate("document.querySelector('#toast').innerText"))
+    pg.click('[data-a=clk][data-k=bstart]'); pg.wait_for_timeout(300)
+    print('after bstart:',txt(120))
+    pg.click('[data-a=clk][data-k=bend]'); pg.wait_for_timeout(300)
+    pg.click('[data-a=clk][data-k=out]'); pg.wait_for_timeout(300)
+    print('after out:',txt(300))
+    pg.screenshot(path=f'/tmp/flow-clock-{w}.png')
+    pg.evaluate("go('home')"); pg.wait_for_timeout(200); print('home:',txt(300)); pg.screenshot(path=f'/tmp/flow-home-{w}.png')
+    pg.evaluate("go('mytasks')"); pg.wait_for_timeout(200); print('mytasks:',txt(300))
+    pg.evaluate("go('mysheet')"); pg.wait_for_timeout(200); print('mysheet:',txt(500)); pg.screenshot(path=f'/tmp/flow-sheet-{w}.png')
+    # kiosk
+    pg.evaluate("A.kiosk()"); pg.wait_for_timeout(300)
+    pg.screenshot(path=f'/tmp/flow-kiosk-{w}.png')
+    pg.click('.kt >> nth=1'); pg.wait_for_timeout(300)
+    print('kiosk pop:',pg.evaluate("document.querySelector('#kiosk-root .sheet').innerText.replace(/\\n/g,' | ')"))
+    pg.screenshot(path=f'/tmp/flow-kiosk2-{w}.png')
+    pg.click('[data-a=kact]'); pg.wait_for_timeout(300)
+    print('kiosk msg:',pg.evaluate("document.querySelector('#kiosk-root .sheet')?.innerText"))
+    pg.click('[data-a=kqr]'); pg.wait_for_timeout(200)
+    print('qr:',pg.evaluate("document.querySelector('#kiosk-root .sheet')?.innerText"))
+    pg.click('[data-a=kexit]'); pg.wait_for_timeout(200)
+    print('kiosk root after exit:',pg.evaluate("document.querySelector('#kiosk-root').innerHTML.length"))
+    # who's in
+    pg.evaluate("A.loginAs({id:'u2'})"); pg.wait_for_timeout(200)
+    pg.evaluate("A.whoIn()"); pg.wait_for_timeout(200)
+    print('who:',pg.evaluate("document.querySelector('#pnl-root').innerText.slice(0,300).replace(/\\n/g,' | ')"))
+    pg.screenshot(path=f'/tmp/flow-who-{w}.png')
+    print('ERRORS:',errs[:10])
+    b.close()
