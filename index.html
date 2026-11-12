@@ -3036,7 +3036,7 @@ function payMatch(fileName){ const T=payTokens(fileName); const set=new Set(T.al
   return {key:T.key,pid:tie?'':top.p.id,how:'check',cands} }
 function payStore(){ let used=0; try{ used=JSON.stringify(S).length }catch(e){} return {used,pct:Math.round(used/PAY_LIMIT*100)} }
 function payStoreNote(){ const s=payStore(); if(s.pct<70)return ''; return `<div class="alert ${s.pct>=90?'':'warn'}" style="margin-bottom:12px">${ic('alert')}<span><b>The app's storage is ${s.pct}% full.</b> ${s.pct>=90?'Saving will start to fail soon. Delete old payslips you no longer need.':'Delete old payslips you no longer need before it fills up.'}</span></div>` }
-function payShareNote(){ return (typeof SYNC!=='undefined'&&SYNC.on)?'<b>Shared mode is on:</b> every phone downloads these files too, so avoid real payslips until personal logins exist.':'Files stay in this browser.' }
+function payShareNote(){ if(typeof SYNC!=='undefined'&&SYNC.on&&SYNC.priv)return 'Each person only receives their own payslips. People with the Payslips permission see everyone\'s.'; return (typeof SYNC!=='undefined'&&SYNC.on)?'<b>Shared mode is on:</b> every phone downloads these files too, so avoid real payslips until personal logins exist.':'Files stay in this browser.' }
 const fsz=n=>n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
 let PB=null;
 A.payBulk=()=>{ const y=new Date().getFullYear(), mo=new Date().getMonth(); const ty=mo>=3?y+'/'+String((y+1)%100).padStart(2,'0'):(y-1)+'/'+String(y%100).padStart(2,'0');
