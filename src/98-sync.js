@@ -56,7 +56,7 @@ async function cloudInit(cfg){ const site=await cloudGate(cfg);
   try{
     const p=await syncFetch('api/ping');
     if(!p.hasState){
-      if(!(p.master||p.role==='Owner'||p.role==='Admin')){ clScreen('fail',{err:'This business has not been set up yet. Ask the owner to sign in first.'}); return new Promise(()=>{}) }
+      if(!(p.master||p.role==='Admin')){ clScreen('fail',{err:'This business has not been set up yet. Ask your business admin to sign in first.'}); return new Promise(()=>{}) }
       const st=blankData(site.name,'',clName()); st.people[0].email=CL.who.email; st.org.email=CL.who.email; delete st.ui;
       await syncFetch('api/init',{method:'POST',body:JSON.stringify({state:st})},30000) }
     if(new URLSearchParams(location.search).get('shared')==='1')clSet('pt-noauto-'+site.id,'1');

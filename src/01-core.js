@@ -113,8 +113,10 @@ const CLI=id=>S.clients.find(a=>a.id===id);
 function commit(){ save(); render(); }
 
 /* ---------- roles and features ---------- */
-const ROLES=[['owner','Owner'],['admin','Admin'],['manager','Manager'],['member','Staff (Member)']];
-const roleName=r=>({owner:'Owner',admin:'Admin',manager:'Manager',member:'Staff'}[r]||r);
+// Standard Proview roles (20 Nov 2026): Admin, Manager, Staff. The business's first person keeps the stored key 'owner'
+// (they set up the first PIN and can't be archived) but is an Admin everywhere on screen.
+const ROLES=[['admin','Admin'],['manager','Manager'],['member','Staff']];
+const roleName=r=>({owner:'Admin',admin:'Admin',manager:'Manager',member:'Staff'}[r]||r);
 const FEATS=[['timesheets','Timesheets','Team timesheets, live locations, clock-ins'],['approvals','Approvals','Approve or reopen timesheets'],['rota','Rota','Shifts, cover needs, rota settings'],['tasks','Tasks','Tasks and templates'],['timeoff','Time off','Team leave requests'],['reports','Reports','Reports and exported files'],['payslips','Payslips & P45s','Upload and manage documents'],['people','People','Edit team profiles and send invites'],['ai','Proview AI','Ask questions about the data'],['settings','Settings pages','View settings pages']];
 const MGR_DEF=['timesheets','approvals','rota','tasks','timeoff','reports','payslips','people','ai','settings'];
 function feat(p,k){ if(!p)return false; if(p.role==='owner'||p.role==='admin')return true; if(p.feats&&p.feats[k]!==undefined)return !!p.feats[k]; return p.role==='manager'&&MGR_DEF.includes(k) }

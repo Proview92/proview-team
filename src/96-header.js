@@ -1,6 +1,6 @@
 /* ===== Top-right header group, the same in every Proview app =====
    (HEADER_BAR_STANDARD.md; copied from Proview Bookings topMe() and Proview Signage web/hub.js PVHub.accountMenu)
-   - "Dashboard" button: back to dashboard.proviewcrm.co.uk. Cloud mode, for the Proview master, Owners and Admins (as Signage).
+   - "Dashboard" button: back to dashboard.proviewcrm.co.uk. Cloud mode, for the Proview master and Admins (as Signage).
    - Blue avatar with the person's initials: opens the account menu (Signed in as <email>, Account, ..., Sign out).
    - Red sign-out button: A.signout, the app's own sign-out (sends unsaved changes, ends the person's session and, for an
      email login, signs out of the account). Hidden when nobody signs in (the app on this device only, no cloud.json). */
@@ -27,7 +27,7 @@ const hdrCL=()=>{ try{ return CL.site&&CL.who?CL:null }catch(e){ return null } }
 const hdrSync=()=>{ try{ return !!(SYNC.priv&&SYNC.on) }catch(e){ return false } };
 // someone signed in (cloud email login, or a personal PIN login on the shared server), so there is something to sign out of
 const hdrSignedIn=()=>!!hdrCL()||hdrSync();
-const hdrCanDash=m=>{ const c=hdrCL(); return !!c&&!!(c.who.is_master||['Owner','Admin'].includes(c.site.role))&&isAdmin(m) };
+const hdrCanDash=m=>{ const c=hdrCL(); return !!c&&!!(c.who.is_master||c.site.role==='Admin')&&isAdmin(m) };
 function hdrRight(m){ const c=hdrCL(), sub=roleName(m.role)+(S.org&&S.org.name?' · '+S.org.name:'');
   let h=`<span class="hdr-br" aria-hidden="true"></span>`;
   if(hdrCanDash(m))h+=`<a class="pv-dash" href="https://dashboard.proviewcrm.co.uk/" title="Proview dashboard: all your Proview apps" aria-label="Proview dashboard"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Dashboard</span></a>`;
