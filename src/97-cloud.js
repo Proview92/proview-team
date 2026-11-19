@@ -104,5 +104,5 @@ async function cloudGate(cfg){ CL.cfg=cfg; const rec=/[#&]type=recovery/.test(lo
 /* In cloud mode businesses live in the licence portal, not in this browser. */
 (function(){ const add=A.addBiz, open=A.openBiz;
   A.addBiz=d=>{ if(!CL.site)return add(d); toast('Businesses are added in the licence portal.') };
-  A.openBiz=d=>{ if(!CL.site)return open(d); if((CL.who.sites||[]).length>1)A.cloudSwitch() };
-  AFTER.push(()=>{ if(!CL.site||!CL.who||(CL.who.sites||[]).length<2)return; const hd=document.querySelector('.pop[role=menu] .hd'); if(hd&&!document.getElementById('clsw'))hd.insertAdjacentHTML('afterend',`<button id="clsw" data-a="cloudSwitch">${ic('build')}Switch business</button>`) }) })();
+  A.openBiz=d=>{ if(!CL.site)return open(d); if((CL.who.sites||[]).length>1)A.cloudSwitch() }; })();
+/* "Switch business" (two or more businesses) is in the avatar's account menu: 96-header.js. */

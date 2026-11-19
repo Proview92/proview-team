@@ -195,9 +195,7 @@ function topHtml(){ const m=me(); const unread=S.notifs.filter(n=>!n.read&&(!n.t
   h+=`<button class="ib" data-a="chat" title="Team chat" aria-label="Team chat">${ic('chat')}</button>`;
   h+=`<button class="ib" data-a="go" data-k="inbox" title="Inbox" aria-label="Inbox">${ic('inbox')}${inb?`<span class="dot">${inb}</span>`:''}</button>`;
   h+=`<button class="ib" data-a="go" data-k="notifs" title="Notifications" aria-label="Notifications">${ic('bell')}${unread?`<span class="dot">${unread}</span>`:''}</button>`;
-  h+=`<span class="rel"><button class="ib" data-a="acct" aria-label="Account" aria-expanded="${U.pop==='acct'}" style="border:0;padding:0">${av(m)}</button>`;
-  if(U.pop==='acct')h+=`<div class="pop" role="menu"><div class="hd"><b>${esc(m.name)}</b><small style="display:block">${esc(m.email||'')}</small><small>${roleName(m.role)} · ${esc(S.org.name)}</small></div><button data-a="profile">${ic('user')}My profile</button><button data-a="go" data-k="clock">${ic('clock')}My time clock</button>${isAdmin(m)||feat(m,'people')?`<button data-a="go" data-k="s-users">${ic('key')}Users &amp; access</button>`:''}<button data-a="theme">${ic(isDark()?'sun':'moon')}${isDark()?'Light mode':'Dark mode'}</button>${(typeof SYNC==='undefined'||!SYNC.priv||feat(m,'timesheets'))?`<button data-a="kiosk">${ic('kiosk')}Open kiosk</button>`:''}<button data-a="signout">${ic('out')}Sign out / switch person</button></div>`;
-  return h+'</span>' }
+  return h+hdrRight(m) }
 const navB=()=>{ try{return localStorage.getItem(KEY+'-nav')==='b'}catch(e){return false} };
 const navBottom=()=>navB()&&window.innerWidth>860;
 const denseOn=()=>{ try{return localStorage.getItem(KEY+'-dense')==='1'}catch(e){return false} };
@@ -255,7 +253,7 @@ AFTER.push(enhSet);
 A.setc=d=>{ S.ui.setc=S.ui.setc||{}; S.ui.setc[d.k]=!S.ui.setc[d.k]; save(); render() };
 A.setall=d=>{ S.ui.setc=S.ui.setc||{}; const c=$('#main'); [...c.querySelectorAll('.card.pad')].filter(x=>x.firstElementChild&&x.firstElementChild.tagName==='H2').forEach(cd=>{ const h=cd.firstElementChild; S.ui.setc[h.getAttribute('data-k')||(U.page+'|'+h.textContent.trim())]=d.v==='1' }); save(); render() };
 A.theme=()=>{ const t=isDark()?'light':'dark'; document.documentElement.setAttribute('data-theme',t); try{localStorage.setItem(KEY+'-theme',t)}catch(e){} render() };
-A.acct=()=>{ U.pop=U.pop==='acct'?null:'acct'; render() };
+
 I.loc=(el)=>{ U.loc=el.value; render() };
 
 /* ---------- panels, modals, toast ---------- */

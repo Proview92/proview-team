@@ -497,6 +497,43 @@ tr.grph td b{color:var(--main);font-weight:700}
 tr.grph td span{display:inline-block;margin-left:4px;padding:0 7px;border-radius:10px;background:var(--line);font-weight:600}
 table.rota tr.grph td{position:sticky;left:0}
 @media(max-width:600px){ .top select{flex:1 1 70px;min-width:0;max-width:150px;padding-left:8px;padding-right:22px;font-size:14px;text-overflow:ellipsis} }
+/* ---- top-right header group: Dashboard button, avatar + account menu, red sign-out (HEADER_BAR_STANDARD.md; values as Proview Bookings / Signage) ---- */
+.pv-dash{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 13px;border-radius:10px;border:1px solid var(--line);background:var(--card,#fff);color:var(--ink);font-weight:600;font-size:14px;text-decoration:none;flex:none;white-space:nowrap;box-sizing:border-box;margin-left:4px}
+.pv-dash:hover{background:var(--bg)}
+.pv-dash svg{width:17px;height:17px;flex:none}
+.top-me{display:flex;align-items:center;gap:4px;flex:none;margin-left:8px}
+.top-av{width:34px;height:34px;border-radius:50%;border:0;padding:0;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,#2f84d4 0%,#5a5fbb 100%);color:#fff;font-family:inherit;font-weight:700;font-size:12.5px;line-height:1;cursor:pointer;text-decoration:none}
+.top-av:hover{filter:brightness(1.08)}
+.top-me .top-out{position:relative;width:38px;height:38px;min-width:38px;padding:0;border-radius:10px;border:1px solid #d92d20;background:#d92d20;color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;box-sizing:border-box}
+.top-me .top-out:hover{background:#b42318;border-color:#b42318;color:#fff}
+.top-me .top-out svg{width:18px;height:18px}
+.top-av:focus-visible,.top-me .top-out:focus-visible,.pv-dash:focus-visible{outline:2px solid #5a8dee;outline-offset:2px}
+.hdr-br{display:none}
+.pv-acct{position:fixed;z-index:310;width:264px;max-width:calc(100vw - 16px);background:#fff;border:1px solid #e4e2dc;border-radius:12px;box-shadow:0 12px 32px rgba(20,20,30,.16);padding:6px;font-size:14px;color:#17171c;box-sizing:border-box}
+.pv-acct-h{display:flex;align-items:center;gap:10px;padding:8px 8px 12px;margin-bottom:6px;border-bottom:1px solid #eceae4;min-width:0}
+.pv-acct-h .ct{flex:1;min-width:0}.pv-acct-h b{display:block;font-size:14px;font-weight:700;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-acct-h small{display:block;font-size:12.5px;line-height:17px;color:#8b8b95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-acct-i{display:flex;align-items:center;gap:10px;width:100%;height:36px;padding:0 10px;border-radius:8px;border:0;background:none;font:inherit;font-size:14px;font-weight:550;color:#17171c!important;text-decoration:none!important;cursor:pointer;text-align:left;box-sizing:border-box}
+.pv-acct-i:hover,.pv-acct-i:focus-visible{background:#f3f2ee;outline:0}
+.pv-acct-i svg{width:17px!important;height:17px!important;color:#4a4a55;flex:none}
+.pv-acct-sep{height:1px;background:#eceae4;margin:6px 4px}
+.hub-av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,#2f84d4 0%,#5a5fbb 100%);color:#fff;font-weight:700;font-size:12.5px}
+@media (max-width:700px){.pv-dash{width:34px;height:34px;padding:0;justify-content:center}.pv-dash span{display:none}.top-me{margin-left:4px;gap:2px}.top-av{width:32px;height:32px;font-size:12px}.top-me .top-out{width:36px;min-width:36px;height:36px}}
+/* The header's own width decides (the side menu comes and goes): first the Dashboard button and the save status shrink to
+   icons, then the menu, page title and this group take the first row and the location, status and other buttons the next. */
+.top{container:hdr/inline-size}
+@container hdr (max-width:960px){.top>.pv-dash{width:38px;padding:0;justify-content:center}.top>.pv-dash span{display:none}.top>.sv{font-size:0;gap:0}.top>.sv:before{width:9px;height:9px}}
+@media (max-width:700px){.top>.pv-dash{width:34px;height:34px}}
+@container hdr (max-width:780px){
+  .top>.mnu,.top>h1,.top>.pv-dash,.top>.top-me{order:0}
+  .top>h1{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .top>.hdr-br{display:block;order:1;flex:0 0 100%;height:0}
+  .top>:not(.mnu):not(h1):not(.pv-dash):not(.top-me):not(.hdr-br){order:2}
+  .top>.sv{margin-left:auto}
+}
+@media (max-width:600px){.top{flex-wrap:wrap;row-gap:6px}}
+@media (min-width:601px){.top{row-gap:6px}}
+@media print{.pv-dash,.top-me,.pv-acct{display:none!important}}
 /* ===== Proview shell: the same logo, sign-in page and loading page as the other Proview sites ===== */
 .pvlogo{display:block;width:30px;height:30px;flex:none;border-radius:22%;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22a-team%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2310B981%22/%3E%3Cstop offset=%221%22 stop-color=%22%23047857%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22b-team%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2356A7DC%22/%3E%3Cstop offset=%221%22 stop-color=%22%236C6FB6%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23111A33%22/%3E%3ClinearGradient id=%22pvg-team%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2355A8DE%22/%3E%3Cstop offset=%22.55%22 stop-color=%22%236B70B8%22/%3E%3Cstop offset=%221%22 stop-color=%22%2358A0DA%22/%3E%3C/linearGradient%3E%3Cpath transform=%22translate%287.00 12.45%29 scale%280.16529%29%22 d=%22M1.8 163.1 C-0.3 161.8 -0.3 161.7 0.5 160.5 C0.8 160.1 1.1 159.1 1.7 157.5 C2.1 156.1 2.7 154.5 3 153.8 C3.2 153.1 3.8 151.7 4.1 150.7 C4.4 149.7 5 148.3 5.3 147.5 C5.6 146.7 6.3 144.9 6.8 143.5 C7.3 142.1 8 140.1 8.4 139.1 C8.7 138.1 9.3 136.4 9.8 135.2 C10.2 134 11 131.5 11.7 129.7 C12.3 127.8 13.2 125.3 13.7 124 C14.1 122.7 14.6 121.4 14.8 121 C14.9 120.6 15.4 119.2 15.9 117.8 C16.4 116.3 17.3 113.9 17.9 112.3 C18.4 110.7 19.2 108.4 19.7 107.2 C20.1 105.9 20.7 104.3 21 103.6 C22.1 101 26.6 88.3 27.6 84.9 C30.1 76.9 33.3 69.4 34.5 68.3 C36 67.1 35.2 67.1 68.7 67 C84.4 67 97.9 67 98.8 67 C107.3 66.6 113.8 61 115.6 52.6 C117.7 42.1 110.6 32 100.2 30.9 C99.3 30.8 89 30.8 69 30.8 C39 30.8 38.4 30.8 37.4 30.3 C36.2 29.9 35.6 28.7 32 19.8 C31.5 18.6 30.8 16.9 30.4 15.9 C30 15 29.3 13.4 28.9 12.4 C28.5 11.5 27.8 9.8 27.4 8.6 C24.8 2.6 24.7 2 26.2 1.2 C27.3 0.7 108.5 0.9 111.6 1.4 C118.7 2.7 123.2 4.4 129.1 7.8 C133.8 10.6 138.6 14.8 141.4 18.5 C144.8 23.1 146.9 26.4 148.2 29.4 C149.7 32.9 151.4 38 151.8 40.1 C152.1 42.1 153.2 46 154.8 50.7 C155.8 53.4 157.1 57.5 157.9 59.8 C159.1 63.6 160.8 68.5 162.6 73.8 C163 74.9 163.5 76.3 163.7 76.9 C163.9 77.5 164.4 78.8 164.8 79.9 C165.2 81 166.4 84.5 167.5 87.8 C173.3 105 174.5 108.2 174.9 108.9 C175.4 109.7 176.2 109.7 176.8 109 C177 108.6 178.5 104.5 179.4 101.8 C179.6 100.9 180.5 98.5 181.2 96.4 C184.2 87.7 186.2 81.7 187.6 77.2 C188.1 75.6 193.2 59.8 196.5 49.9 C199.2 41.7 201.6 34.6 202.7 30.7 C203.1 29.5 203.5 28.3 203.6 28.1 C203.7 27.8 204.2 26 204.9 24 C207.8 14.9 208.3 13.3 208.8 11.9 C209.1 11.1 209.8 9 210.4 7.2 C211.9 2.6 212.2 1.9 213.6 1.6 C214.6 1.3 239.4 1.2 240.2 1.4 C240.8 1.6 241.4 2.2 241.4 2.6 C241.4 2.8 240.3 6.3 238 13.2 C237 16.3 236 19.2 235.9 19.8 C235.7 20.3 234.8 23.2 233.8 26.2 C232.8 29.2 231.8 32.5 231.5 33.5 C229.3 40.4 228.6 42.8 227.4 46.2 C225.2 53.2 223.8 57.5 222.7 61.2 C221.5 65.2 220.4 68.7 218.1 75.9 C217.2 78.5 216.1 82.1 215.5 83.8 C213.1 91.7 210.3 100.3 208.9 104.5 C208.4 106.2 207.4 109.1 206.9 111 C206.3 112.9 205.4 115.9 204.8 117.7 C204.2 119.5 203.6 121.4 203.4 122.1 C203.3 122.7 202.4 125.5 201.4 128.3 C200.5 131.1 199.3 135 198.8 136.8 C198.2 138.7 197.4 141.4 196.9 142.8 C196.5 144.3 195.9 146.1 195.7 147 C195.3 148.3 193.9 152.8 193.3 154.5 C191.8 158.8 191.4 159 183.5 159 C174.5 159 169.7 158.2 165.1 155.8 C161.3 153.8 158 149.7 156.3 144.6 C156.1 144 155.6 142.9 155.3 142 C154.7 140.3 152.5 134.2 151.1 130 C150.2 127.4 149 123.9 147.2 119 C146.7 117.7 146 115.7 145.7 114.6 C145.3 113.6 144.5 111.2 143.8 109.3 C139.7 97.9 138.7 95.1 137.8 92.3 C136.8 89.2 136.6 88.9 136.1 88.6 C135.3 88.1 134.6 88.4 133.1 89.8 C129.7 93 123.3 96.3 117.3 97.9 C110.5 99.7 109.7 99.7 79.9 99.8 C54.9 99.8 54.9 99.8 54.1 100.3 C53.2 100.9 52.2 103.5 50.7 108.9 C50.3 110.3 49.7 112.2 47.6 118.9 C47.2 120.5 46.7 122.2 46.5 122.7 C45.1 127.5 41.7 138 40.9 140.1 C40.6 140.7 40 142.2 39.6 143.4 C38.1 148 37 150.4 35.1 153.8 C33.8 156.2 33.7 156.4 31.5 158.5 C29.3 160.7 28.2 161.5 26 162.5 C25.1 162.9 24.4 163.3 24.1 163.6 L23.7 164 L13.4 164 L3.1 164 L1.8 163.1 Z%22 fill=%22url%28%23pvg-team%29%22/%3E%3Ccircle cx=%2246%22 cy=%2246%22 r=%2216.5%22 fill=%22%23111A33%22/%3E%3Ccircle cx=%2246%22 cy=%2246%22 r=%2215%22 fill=%22url%28%23a-team%29%22/%3E%3Cg transform=%22translate%2836.879999999999995 36.879999999999995%29 scale%280.76%29%22 fill=%22none%22 stroke=%22%23fff%22 color=%22%23fff%22 stroke-width=%221.974%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%225%22 width=%2220%22 height=%2214%22 rx=%222.5%22/%3E%3Ccircle cx=%228.25%22 cy=%2210.75%22 r=%222.25%22/%3E%3Cpath d=%22M4.8 16.2c.6-1.5 1.9-2.2 3.5-2.2s2.9.75 3.5 2.2%22/%3E%3Cpath d=%22M14.5 10h4M14.5 14h3%22/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
 .pvword{font-size:15px;font-weight:500;letter-spacing:.04em;line-height:1.25;color:#fff;white-space:nowrap}
@@ -770,9 +807,7 @@ function topHtml(){ const m=me(); const unread=S.notifs.filter(n=>!n.read&&(!n.t
   h+=`<button class="ib" data-a="chat" title="Team chat" aria-label="Team chat">${ic('chat')}</button>`;
   h+=`<button class="ib" data-a="go" data-k="inbox" title="Inbox" aria-label="Inbox">${ic('inbox')}${inb?`<span class="dot">${inb}</span>`:''}</button>`;
   h+=`<button class="ib" data-a="go" data-k="notifs" title="Notifications" aria-label="Notifications">${ic('bell')}${unread?`<span class="dot">${unread}</span>`:''}</button>`;
-  h+=`<span class="rel"><button class="ib" data-a="acct" aria-label="Account" aria-expanded="${U.pop==='acct'}" style="border:0;padding:0">${av(m)}</button>`;
-  if(U.pop==='acct')h+=`<div class="pop" role="menu"><div class="hd"><b>${esc(m.name)}</b><small style="display:block">${esc(m.email||'')}</small><small>${roleName(m.role)} · ${esc(S.org.name)}</small></div><button data-a="profile">${ic('user')}My profile</button><button data-a="go" data-k="clock">${ic('clock')}My time clock</button>${isAdmin(m)||feat(m,'people')?`<button data-a="go" data-k="s-users">${ic('key')}Users &amp; access</button>`:''}<button data-a="theme">${ic(isDark()?'sun':'moon')}${isDark()?'Light mode':'Dark mode'}</button>${(typeof SYNC==='undefined'||!SYNC.priv||feat(m,'timesheets'))?`<button data-a="kiosk">${ic('kiosk')}Open kiosk</button>`:''}<button data-a="signout">${ic('out')}Sign out / switch person</button></div>`;
-  return h+'</span>' }
+  return h+hdrRight(m) }
 const navB=()=>{ try{return localStorage.getItem(KEY+'-nav')==='b'}catch(e){return false} };
 const navBottom=()=>navB()&&window.innerWidth>860;
 const denseOn=()=>{ try{return localStorage.getItem(KEY+'-dense')==='1'}catch(e){return false} };
@@ -830,7 +865,7 @@ AFTER.push(enhSet);
 A.setc=d=>{ S.ui.setc=S.ui.setc||{}; S.ui.setc[d.k]=!S.ui.setc[d.k]; save(); render() };
 A.setall=d=>{ S.ui.setc=S.ui.setc||{}; const c=$('#main'); [...c.querySelectorAll('.card.pad')].filter(x=>x.firstElementChild&&x.firstElementChild.tagName==='H2').forEach(cd=>{ const h=cd.firstElementChild; S.ui.setc[h.getAttribute('data-k')||(U.page+'|'+h.textContent.trim())]=d.v==='1' }); save(); render() };
 A.theme=()=>{ const t=isDark()?'light':'dark'; document.documentElement.setAttribute('data-theme',t); try{localStorage.setItem(KEY+'-theme',t)}catch(e){} render() };
-A.acct=()=>{ U.pop=U.pop==='acct'?null:'acct'; render() };
+
 I.loc=(el)=>{ U.loc=el.value; render() };
 
 /* ---------- panels, modals, toast ---------- */
@@ -3148,6 +3183,55 @@ A.pxOpen=()=>{ closePanel(); const last=pxMonth(-1); const f=U.t.pxF||last[0], t
     save:v=>{ if(!v.from||!v.to){toast('Choose both dates');return false} if(v.to<v.from){toast('The end date is before the start date');return false} U.t.pxF=v.from; U.t.pxT=v.to; const rows=pxRows(v.from,v.to); if(rows.length<2){toast('No hours or time off in those dates.');return false} const nm='payroll-'+v.from+'-to-'+v.to+'.csv'; closePanel(); setTimeout(()=>previewCSV(nm,rows,'Payroll'),60); return false }}) };
 A.pxQuick=d=>{ const b=$('#pnl-body'); if(!b)return; let r; if(d.k==='this'){ const m=pxMonth(0); r=[m[0],today()<m[1]?today():m[1]] } else if(d.k==='prev'){ const e=addD(wkStart(today()),-1); r=[addD(e,-27),e] } else r=pxMonth(-1); $('[name=from]',b).value=r[0]; $('[name=to]',b).value=r[1] };
 
+/* ---- 96-header.js ---- */
+/* ===== Top-right header group, the same in every Proview app =====
+   (HEADER_BAR_STANDARD.md; copied from Proview Bookings topMe() and Proview Signage web/hub.js PVHub.accountMenu)
+   - "Dashboard" button: back to dashboard.proviewcrm.co.uk. Cloud mode, for the Proview master, Owners and Admins (as Signage).
+   - Blue avatar with the person's initials: opens the account menu (Signed in as <email>, Account, ..., Sign out).
+   - Red sign-out button: A.signout, the app's own sign-out (sends unsaved changes, ends the person's session and, for an
+     email login, signs out of the account). Hidden when nobody signs in (the app on this device only, no cloud.json). */
+const PVACCT_SVG={user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',help:'<circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/>',logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',moon:'<path d="M20 14A8 8 0 0110 4a8 8 0 1010 10z"/>',kiosk:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',build:'<path d="M4 21V5l8-2v18M12 9h8v12M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/>'};
+let pvAcct=null;
+function pvCloseAccount(){ if(!pvAcct)return; pvAcct.el.remove(); pvAcct.btn.setAttribute('aria-expanded','false'); document.removeEventListener('mousedown',pvAcct.out,true); document.removeEventListener('keydown',pvAcct.key,true); removeEventListener('hashchange',pvCloseAccount); pvAcct=null }
+function pvAccountMenu(btn,o){ if(pvAcct){ const was=pvAcct.btn; pvCloseAccount(); if(was===btn||was.isConnected===false&&btn.classList.contains('top-av'))return }
+  const m=document.createElement('div'); m.className='pv-acct'; m.setAttribute('role','menu'); m.setAttribute('aria-label','My account');
+  m.innerHTML=`<div class="pv-acct-h"><span class="hub-av">${esc(o.initials||'?')}</span><span class="ct"><b>${esc(o.name||'')}</b>${o.email?`<small>${esc(o.email)}</small>`:''}${o.sub?`<small>${esc(o.sub)}</small>`:''}</span></div>`;
+  (o.items||[]).forEach(it=>{ if(it.sep){ const d=document.createElement('div'); d.className='pv-acct-sep'; m.appendChild(d) }
+    const el=document.createElement(it.href?'a':'button'); el.className='pv-acct-i'; el.setAttribute('role','menuitem'); if(it.href)el.href=it.href; else el.type='button';
+    el.innerHTML=`<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${PVACCT_SVG[it.icon]||''}</svg><span>${esc(it.label)}</span>`;
+    el.addEventListener('click',e=>{ pvCloseAccount(); if(it.run){ e.preventDefault(); it.run() } }); m.appendChild(el) });
+  document.body.appendChild(m); const r=btn.getBoundingClientRect(); m.style.top=Math.round(r.bottom+8)+'px'; m.style.right=Math.max(8,Math.round(innerWidth-r.right))+'px';
+  const items=()=>[...m.querySelectorAll('.pv-acct-i')];
+  pvAcct={el:m,btn,out:e=>{ if(!m.contains(e.target)&&!btn.contains(e.target)&&!(e.target.closest&&e.target.closest('.top-av')))pvCloseAccount() },
+    key:e=>{ if(e.key==='Escape'){ e.stopPropagation(); pvCloseAccount(); (btn.isConnected?btn:document.querySelector('#top .top-av'))?.focus(); return }
+      if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); const l=items(), i=l.indexOf(document.activeElement); l[(i+(e.key==='ArrowDown'?1:-1)+l.length)%l.length]?.focus() } }};
+  btn.setAttribute('aria-expanded','true'); document.addEventListener('mousedown',pvAcct.out,true); document.addEventListener('keydown',pvAcct.key,true); addEventListener('hashchange',pvCloseAccount);
+  if(o.focusFirst)items()[0]?.focus() }
+// CL lives in 97-cloud.js; read it safely in case a render runs before that file
+const hdrCL=()=>{ try{ return CL.site&&CL.who?CL:null }catch(e){ return null } };
+const hdrSync=()=>{ try{ return !!(SYNC.priv&&SYNC.on) }catch(e){ return false } };
+// someone signed in (cloud email login, or a personal PIN login on the shared server), so there is something to sign out of
+const hdrSignedIn=()=>!!hdrCL()||hdrSync();
+const hdrCanDash=m=>{ const c=hdrCL(); return !!c&&!!(c.who.is_master||['Owner','Admin'].includes(c.site.role))&&isAdmin(m) };
+function hdrRight(m){ const c=hdrCL(), sub=roleName(m.role)+(S.org&&S.org.name?' · '+S.org.name:'');
+  let h=`<span class="hdr-br" aria-hidden="true"></span>`;
+  if(hdrCanDash(m))h+=`<a class="pv-dash" href="https://dashboard.proviewcrm.co.uk/" title="Proview dashboard: all your Proview apps" aria-label="Proview dashboard"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Dashboard</span></a>`;
+  h+=`<div class="top-me"><button type="button" class="top-av" data-a="acct" title="${esc(m.name+' · '+sub)}" aria-label="My account" aria-haspopup="menu" aria-expanded="${pvAcct&&pvAcct.el.isConnected?'true':'false'}">${esc(ini(m.name))}</button>`;
+  if(hdrSignedIn())h+=`<button type="button" class="icon-btn top-out" data-a="signout" title="Sign out" aria-label="Sign out"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${PVACCT_SVG.logout}</svg></button>`;
+  return h+'</div>' }
+// the avatar's account menu: what the old drop-down had, in the standard menu
+A.acct=(d,el,e)=>{ if(e)e.stopPropagation(); const m=me(), c=hdrCL(), items=[];
+  items.push({label:'Account',icon:'user',run:()=>A.profile()});
+  items.push({label:'My time clock',icon:'clock',run:()=>go('clock')});
+  if(isAdmin(m)||feat(m,'people'))items.push({label:'Users & access',icon:'users',run:()=>go('s-users')});
+  if(c&&(c.who.sites||[]).length>1)items.push({label:'Switch business',icon:'build',run:()=>A.cloudSwitch()});
+  items.push({label:isDark()?'Light mode':'Dark mode',icon:isDark()?'sun':'moon',run:()=>A.theme()});
+  if((()=>{ try{ return !SYNC.priv }catch(e){ return true } })()||feat(m,'timesheets'))items.push({label:'Open kiosk',icon:'kiosk',run:()=>A.kiosk()});
+  items.push({label:hdrSignedIn()?'Sign out':'Sign out / switch person',icon:'logout',run:()=>A.signout(),sep:true});
+  const email=c?c.who.email:(m.email||'');
+  pvAccountMenu(el,{initials:ini(m.name),name:m.name,email:email?(hdrSignedIn()?'Signed in as '+email:email):'',sub:roleName(m.role)+(S.org&&S.org.name?' · '+S.org.name:''),focusFirst:!!e&&e.detail===0,items}) };
+
 /* ---- 97-cloud.js ---- */
 /* ===== Cloud mode (Supabase), set up the same way as Proview Bookings =====
    cloud.json next to index.html holds { url, key } of the Supabase project. When it is there:
@@ -3255,8 +3339,8 @@ async function cloudGate(cfg){ CL.cfg=cfg; const rec=/[#&]type=recovery/.test(lo
 /* In cloud mode businesses live in the licence portal, not in this browser. */
 (function(){ const add=A.addBiz, open=A.openBiz;
   A.addBiz=d=>{ if(!CL.site)return add(d); toast('Businesses are added in the licence portal.') };
-  A.openBiz=d=>{ if(!CL.site)return open(d); if((CL.who.sites||[]).length>1)A.cloudSwitch() };
-  AFTER.push(()=>{ if(!CL.site||!CL.who||(CL.who.sites||[]).length<2)return; const hd=document.querySelector('.pop[role=menu] .hd'); if(hd&&!document.getElementById('clsw'))hd.insertAdjacentHTML('afterend',`<button id="clsw" data-a="cloudSwitch">${ic('build')}Switch business</button>`) }) })();
+  A.openBiz=d=>{ if(!CL.site)return open(d); if((CL.who.sites||[]).length>1)A.cloudSwitch() }; })();
+/* "Switch business" (two or more businesses) is in the avatar's account menu: 96-header.js. */
 
 /* ---- 98-sync.js ---- */
 /* ===== Shared-data mode (only when the app is served by server.js) =====
