@@ -228,7 +228,7 @@ Deno.serve(async (req) => {
     const gate = g.data as Any;
     if (!gate?.exists || (!gate.master && !gate.role)) return send({ error: "site" }, 403);
     if (!gate.master && !gate.ok) return send({ error: "licence", suspended: !!gate.suspended }, 402);
-    const boss = gate.master || gate.role === "Owner" || gate.role === "Admin";
+    const boss = gate.master || gate.role === "Admin";
     const body = async () => { try { return await req.json(); } catch (_) { return {}; } };
 
     let { rev, state } = await loadState(db, site);
@@ -238,7 +238,7 @@ Deno.serve(async (req) => {
     if (path === "api/init" && req.method === "POST") {
       const b = await body();
       if (!state && b.state) {
-        if (!boss) return send({ error: "Only the owner can set this business up." }, 403);
+        if (!boss) return send({ error: "Only an admin can set this business up." }, 403);
         const nr = await commit(db, site, 0, b.state, null);
         if (nr) { rev = nr; await syncPeople(db, site, b.state); } else rev = (await loadState(db, site)).rev;
       }
@@ -256,7 +256,7 @@ Deno.serve(async (req) => {
       const rank = (p: Any) => p.role === "owner" ? 4 : p.role === "admin" ? 3 : p.role === "manager" ? 2 : 1;
       const live = (state.people || []).filter((p: Any) => p && !p.archived);
       let p = live.filter((x: Any) => String(x.email || "").trim().toLowerCase() === email).sort((a: Any, b: Any) => rank(b) - rank(a))[0];
-      // the business owner / admin (or Proview) with no profile of their own comes in as the owner
+      // a business admin (or Proview) with no profile of their own comes in as the first admin
       if (!p && boss) p = live.find((x: Any) => x.role === "owner") || live.find((x: Any) => x.role === "admin");
       if (!p) return send({ none: true });
       return send({ token: await newToken(db, site, p.id, user.id), id: p.id });
