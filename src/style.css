@@ -717,3 +717,10 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
   .ppbar+.card.tw table.t tr>:nth-child(n+2):not(:nth-child(3)):not([colspan]){display:none}
   .ppbar+.card.tw table.t tr>:nth-child(3){text-align:right;white-space:nowrap}
 }
+
+/* Drop-down boxes look like the other boxes in every browser (Safari on a Mac drew its own thin, glossy style) */
+select:not(.gsel):not([multiple]):not([size]){-webkit-appearance:none;appearance:none;padding-right:30px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237d859b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-size:15px 15px;text-overflow:ellipsis}
+@media(max-width:600px){ .top select{padding-right:26px} }
+
+/* No pinch or double-tap zoom on touch screens; one-finger scrolling in both directions stays */
+html,body{touch-action:pan-x pan-y}
