@@ -661,3 +661,11 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
   .tkbar input[type=search]{order:9;flex:0 0 100%}
 }
 @media(max-width:359px){.onbw-h .mut{display:none}}
+
+/* Tasks: repeat on chosen days */
+.tk-days .cks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.tk-days .ck{justify-content:center;padding:5px 0;min-height:44px}
+/* iPhone: date and time boxes keep inside their half of the row */
+.pnl .pb input[type=date],.pnl .pb input[type=time]{min-width:0;max-width:100%;box-sizing:border-box}
+@supports (-webkit-touch-callout:none){.pnl .pb input[type=date],.pnl .pb input[type=time]{-webkit-appearance:none;appearance:none;display:block;width:100%}.pnl .pb input::-webkit-date-and-time-value{text-align:left}}
+.pnl .pb .f2>label,.pnl .pb .f3>label{min-width:0}

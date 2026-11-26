@@ -87,7 +87,7 @@ function doClock(pid,kind,o,done){ o=o||{}; const p=P(pid); const ws=whoState(p)
   fin(null) }
 
 /* ----- tasks ----- */
-function taskOccurs(t,d){ if(t.rep==='none')return t.date===d; if(d<t.date)return false; const w=dow(d); if(t.rep==='daily')return true; if(t.rep==='weekdays')return w<5; if(t.rep==='weekly')return dow(t.date)===w; return false }
+function taskOccurs(t,d){ if(t.rep==='none')return t.date===d; if(d<t.date)return false; const w=dow(d); if(t.rep==='daily')return true; if(t.rep==='weekdays')return w<5; if(t.rep==='weekly')return dow(t.date)===w; if(t.rep==='days')return (t.days||[]).map(Number).includes(w); /* chosen days of the week (26 Nov 2026) */ return false }
 function taskAssignees(t,d){ const a=t.asg||{}; if(a.mode==='person')return a.pid?[a.pid]:[]; const ids=uniq(S.shifts.filter(s=>s.date===d&&s.pid&&(!a.shift||a.shift==='any'||a.shift===s.start+'-'+s.end)).map(s=>s.pid)); if(a.mode==='shiftAll')return ids; if(!ids.length)return []; const load=id=>S.tasks.filter(x=>x.id!==t.id&&x.asg.mode==='person'&&x.asg.pid===id&&taskOccurs(x,d)).length; return [by(ids,id=>String(load(id)).padStart(3,'0')+id)[0]] }
 const tasksOn=d=>S.tasks.filter(t=>taskOccurs(t,d)&&(U.loc==='all'||!t.loc||t.loc===U.loc));
 function taskState(t,d){ const as=taskAssignees(t,d); const done=as.length?(t.asg.mode==='shiftAll'?as.every(id=>t.dn[d+'|'+id]):as.some(id=>t.dn[d+'|'+id])):!!t.dn[d+'|*']; if(done)return 'done'; return t.ip&&t.ip[d]?'prog':'todo' }
