@@ -3323,12 +3323,12 @@ A.pxOpen=()=>{ closePanel(); const last=pxMonth(-1); const f=U.t.pxF||last[0], t
 A.pxQuick=d=>{ const b=$('#pnl-body'); if(!b)return; let r; if(d.k==='this'){ const m=pxMonth(0); r=[m[0],today()<m[1]?today():m[1]] } else if(d.k==='prev'){ const e=addD(wkStart(today()),-1); r=[addD(e,-27),e] } else r=pxMonth(-1); $('[name=from]',b).value=r[0]; $('[name=to]',b).value=r[1] };
 
 /* ---- 54-dayview.js ---- */
-/* ===== Phone: Timesheets and Rota one day at a time (owner, 26 Nov 2026) =====
+/* ===== Phone: Timesheets one day at a time (owner, 26 Nov 2026). Rota was tried too and turned down. =====
    On a phone the weekly grids (Member, Mon to Sun, totals) were wider than the screen. Here the same table shows the
    member, ONE day and the totals; a strip of the seven days above it picks the day. Nothing else changes: the cells are
    the same buttons as before. Wider screens are untouched. */
 const DAYRX=/^(mon|tue|wed|thu|fri|sat|sun)/i;
-function enhDay(){ if(innerWidth>600)return; const c=$('#main'); if(!c)return;
+function enhDay(){ if(innerWidth>600||U.page==='rota')return; /* Rota keeps its week grid on a phone (owner, 26 Nov 2026) */ const c=$('#main'); if(!c)return;
   const t=[...c.querySelectorAll('table')].find(x=>{ const th=x.querySelectorAll('thead tr:first-child th'); return th.length>=8&&[1,2,3,4,5,6,7].every(i=>DAYRX.test(th[i].textContent.trim())) }); if(!t)return;
   const th=[...t.querySelectorAll('thead tr:first-child th')].slice(1,8);
   let i=U.phDay; if(!(i>=0&&i<=6)){ i=th.findIndex(x=>x.classList.contains('tod')); if(i<0){ const dn=(new Date().getDay()+6)%7; i=U.phWk===undefined?dn:0 } }
