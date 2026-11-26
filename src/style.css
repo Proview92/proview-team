@@ -525,3 +525,11 @@ table.rota tr.grph td{position:sticky;left:0}
 @media (max-width:600px){.top{flex-wrap:wrap;row-gap:6px}}
 @media (min-width:601px){.top{row-gap:6px}}
 @media print{.pv-dash,.top-me,.pv-acct{display:none!important}}
+
+/* Dashboard documents alert: one line (owner, 26 Nov 2026) */
+.alert.dline{flex-wrap:nowrap;gap:8px;padding:6px 6px 6px 12px;margin-bottom:14px}
+.dline-go{flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:40px;padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.dline-go b{flex:1;min-width:0;font-weight:600;overflow-wrap:anywhere}
+.dline-go svg{flex:none}
+.dline-go:focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:8px}
+.dline-min{flex:none;width:40px;min-width:40px;height:40px;padding:0;display:grid;place-items:center}
