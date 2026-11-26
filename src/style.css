@@ -581,3 +581,62 @@ table.rota tr.grph td{position:sticky;left:0}
   .pnl.multi{width:min(1180px,calc(100vw - 48px))}
   .pnl.multi .pb{column-count:3}
 }
+
+/* Small phones: the documents alert keeps to one line with shorter words */
+.dl-s{display:none}
+@media(max-width:359px){.dl-l{display:none}.dl-s{display:inline}}
+/* Phone: Timesheets and Rota one day at a time */
+.dstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:0 0 8px}
+.dstrip button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:50px;padding:4px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font:inherit}
+.dstrip button small{font-size:12px;font-weight:600;color:var(--mut)}
+.dstrip button b{font-size:16px;line-height:1.1}
+.dstrip button.tod small{color:var(--pri)}
+.dstrip button.on{background:var(--pri);border-color:var(--pri);color:var(--onpri)}
+.dstrip button.on small{color:inherit}
+table.dayone{min-width:0!important;width:100%!important;table-layout:auto!important}
+table.dayone tr>:nth-child(n+2):nth-child(-n+8){display:none}
+table.dayone[data-d="0"] tr>:nth-child(2),table.dayone[data-d="1"] tr>:nth-child(3),table.dayone[data-d="2"] tr>:nth-child(4),table.dayone[data-d="3"] tr>:nth-child(5),table.dayone[data-d="4"] tr>:nth-child(6),table.dayone[data-d="5"] tr>:nth-child(7),table.dayone[data-d="6"] tr>:nth-child(8){display:table-cell}
+table.dayone tr>[colspan]{display:table-cell!important}
+table.dayone .stk{min-width:0!important}
+table.dayone td,table.dayone th{padding-left:8px;padding-right:8px}
+table.dayone tr>:nth-child(10):not([colspan]){display:none}
+table.dayone td,table.dayone th{min-width:0!important}
+table.dayone th.stk{width:auto!important}
+table.dayone th.r{width:auto!important}
+
+table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
+@media(max-width:359px){table.dayone tr>:nth-child(11):not([colspan]){display:none}}
+/* Long forms found by themselves: two columns on tablet and laptop */
+@media(min-width:760px){
+  .pnl.multi.auto{width:min(980px,calc(100vw - 32px))}
+  .pnl.multi.auto .pb{column-count:2}
+  .pnl.multi.auto .pb>*{break-inside:avoid}
+  .pnl.multi.auto .pb>h3{break-after:avoid}
+}
+/* People on a big screen: list on the left, the chosen person on the right */
+.mdv{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;align-items:start}
+.mdv table.t tr>:nth-child(2),.mdv table.t tr>:nth-child(5),.mdv table.t tr>:nth-child(6){display:none}
+.mdv table.t tr>[colspan]{display:table-cell}
+.mdv tr.sel td{background:var(--pril)}
+.mdv tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--pri)}
+.mdd{position:sticky;top:0;display:flex;flex-direction:column;min-width:0}
+.mdh{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--line)}
+.mdh h2{margin:0;font-size:18px}.mdh small{font-size:13px}
+.mdb{padding:4px 16px}
+.mdr{display:grid;grid-template-columns:130px minmax(0,1fr);gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.mdr:first-child{border-top:0}
+.mdr>span{color:var(--mut);font-weight:600;font-size:13px}
+.mdr>b{font-weight:600;overflow-wrap:anywhere}
+.mda>b{display:flex;gap:4px;flex-wrap:wrap}
+.mdf{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
+.mdf .btn{flex:1}
+/* Time off on a big screen: forms open at the side, the calendar stays in view and usable */
+@media(min-width:1100px){
+  .pnl.dock{left:auto!important;right:16px;top:76px!important;width:420px!important;height:calc(100dvh - 92px);max-height:none!important;transform:none!important;box-shadow:0 6px 24px rgba(0,0,0,.18);border:1px solid var(--line)}
+  .pbd.dock{background:transparent!important;pointer-events:none}
+  body.has-dock .content{padding-right:452px}
+}
+@media(min-width:760px){.pnl.wide.multi.auto{width:min(1040px,calc(100vw - 16px))}.pnl.multi.auto .pb>.card,.pnl.multi.auto .pb>div{margin-bottom:10px}}
+/* two boxes side by side never push a small pop-up wider than itself (date boxes on touch screens did) */
+.pnl .pb .f2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pnl .pb .f2>*{min-width:0}.pnl .pb .f2 input,.pnl .pb .f2 select{min-width:0;max-width:100%}

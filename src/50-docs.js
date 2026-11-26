@@ -177,8 +177,8 @@ A.docTplReset=()=>{ const t=$('[name=wbody]'); if(t)t.value=WELCOME_TXT };
 const _vHome=V.home, _vClock=V.clock, _vDash=V.dash, _vInbox=V.inbox;
 function withBanner(h,b){ if(!b)return h; const pb=(typeof previewBar==='function')?previewBar():''; return pb&&h.startsWith(pb)?pb+b+h.slice(pb.length):b+h }
 /* Dashboard: the documents alert as one tidy line. The whole line opens the Documents page; the small arrow minimises it. */
-function docLine(blocked,label){ if(S.ui.docMin)return docBox(blocked,label,'','');
-  return `<div class="alert dline"><button type="button" class="dline-go" data-a="go" data-k="docs" title="Open the Documents page">${ic(blocked?'lock':'alert')}<b>${esc(label)}</b>${ic('chr')}</button><button type="button" class="btn sm dline-min" data-a="docMin" aria-expanded="true" title="Minimise" aria-label="Minimise">${ic('chu')}</button></div>` }
+function docLine(blocked,label,short){ if(S.ui.docMin)return docBox(blocked,label,'','');
+  return `<div class="alert dline"><button type="button" class="dline-go" data-a="go" data-k="docs" title="Open the Documents page">${ic(blocked?'lock':'alert')}<b><span class="dl-l">${esc(label)}</span><span class="dl-s">${esc(short||label)}</span></b>${ic('chr')}</button><button type="button" class="btn sm dline-min" data-a="docMin" aria-expanded="true" title="Minimise" aria-label="Minimise">${ic('chu')}</button></div>` }
 function docBox(blocked,label,html,btn){ const mn=!!S.ui.docMin; if(mn)return `<button class="chip ${blocked?'red':'amber'}" style="margin:0 0 12px;cursor:pointer;border:0;font:inherit" data-a="docMin" aria-expanded="false">${ic(blocked?'lock':'alert')} ${esc(label)} ${ic('chd')}</button>`;
   return `<div class="alert" style="margin-bottom:14px">${ic(blocked?'lock':'alert')}<div style="flex:1">${html}</div>${btn}<button class="btn sm" data-a="docMin" aria-expanded="true" title="Minimise">Minimise ${ic('chu')}</button></div>` }
 A.docMin=()=>{ S.ui.docMin=!S.ui.docMin; save(); render() };
@@ -186,7 +186,7 @@ function docBanner(p){ if(!p||p.noTrack)return ''; const al=docAlertsFor(p); if(
   return docBox(blocked,isTrial(p)?'Confirm the welcome pack':blocked?'Finish your documents':'Documents need attention',(isTrial(p)?'<b>Confirm the welcome pack to start your trial.</b> ':blocked?'<b>Finish your documents before you can clock in.</b> ':'<b>Documents:</b> ')+(isTrial(p)?'':al.map(a=>esc(a.txt)).join(' ')),`<button class="btn sm pri" data-a="go" data-k="mydocs">My documents</button>`) }
 V.home=()=>withBanner(_vHome(),docBanner(me()));
 V.clock=()=>withBanner(_vClock(),docBanner(me()));
-V.dash=()=>{ const al=docAlerts(); const n=new Set(al.map(a=>a.pid)).size; const blocked=dset().gate&&al.some(a=>a.sev==='bad'); const b=al.length?docLine(blocked,plural(n,'person','people')+' with documents to sort'):''; return withBanner(_vDash(),b) };
+V.dash=()=>{ const al=docAlerts(); const n=new Set(al.map(a=>a.pid)).size; const blocked=dset().gate&&al.some(a=>a.sev==='bad'); const b=al.length?docLine(blocked,plural(n,'person','people')+' with documents to sort','Documents: '+plural(n,'person','people')):''; return withBanner(_vDash(),b) };
 /* Inbox: no extra documents card (alerts live on the Documents page, the Dashboard and the menu badge) */
 
 /* menu and page rules */
