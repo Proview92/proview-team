@@ -698,3 +698,16 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
 .tkph-v{display:grid;gap:10px}.tkph-v img{display:block;width:100%;max-height:62vh;object-fit:contain;background:#000}.tkph-v p{margin:0}
 .tkph-c{display:inline-flex;align-items:center;gap:3px}.tkph-c svg{width:13px;height:13px}
 .tkpd{margin-bottom:10px}.tkpd .tkph-g{margin-bottom:0;grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+
+/* People page toolbar: one row on a phone (search, filters, more, add) */
+.pp-w{display:contents}.pp-m{display:none;position:relative}
+.pp-m .dot{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:99px!important;background:var(--pri);color:var(--onpri);font-size:11px;font-weight:700;display:grid;place-items:center;padding:0 4px}
+.pp-m.on2{border-color:var(--pri);color:var(--pri)}
+@media(max-width:1000px){
+  .ppbar{flex-wrap:nowrap;gap:6px;margin-bottom:10px}
+  .ppbar .pp-w,.ppbar .pp-wb,.ppbar .sp{display:none}
+  .ppbar .pp-m{display:inline-flex;flex:none;width:44px;padding:0}
+  .ppbar input[type=search]{flex:1 1 0;min-width:0;width:auto}
+  .ppbar .ppadd{flex:none}
+}
+@media(max-width:600px){.ppbar .ppadd{width:44px;padding:0}.ppbar .ppadd span{display:none}}
