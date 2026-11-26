@@ -19,7 +19,7 @@ A.tkMore=d=>{ U.t.tkMore=U.t.tkMore||{}; U.t.tkMore[d.k]=!U.t.tkMore[d.k]; rende
 A.tkMove=d=>{ const t=S.tasks.find(x=>x.id===d.id); if(!t)return; if(d.to==='done'){ setDoneAll(t,d.d) } else if(d.to==='prog'){ clearDone(t,d.d); t.ip=t.ip||{}; t.ip[d.d]=true } else clearDone(t,d.d); commit() };
 V.tasks=()=>{ const tab=cur('tk','board'); const day=U.t.tkd||today(); const list=tasksOn(day); const mine=myTasks(me().id,day);
   const cols=[['todo','To do'],['prog','In progress'],['done','Done']];
-  const bar=`<div class="bar">${dnav(day===today()?'Today, '+fdate(day):fdl(day),'tkPrev','tkNext')}<button class="btn" data-a="tkToday">Today</button>${tab==='list'?`<input type="search" data-i="tkq" placeholder="Search tasks" value="${esc(U.t.tkq||'')}" aria-label="Search tasks">`:''}<span class="sp"></span><button class="btn pri" data-a="taskEdit" data-id="" data-d="${day}">${ic('plus')}New task</button></div>`;
+  const bar=`<div class="bar tkbar">${dnav(day===today()?'Today, '+fdate(day):(innerWidth<=600?fdate(day):fdl(day)),'tkPrev','tkNext')}<button class="btn" data-a="tkToday">Today</button>${tab==='list'?`<input type="search" data-i="tkq" placeholder="Search tasks" value="${esc(U.t.tkq||'')}" aria-label="Search tasks">`:''}<span class="sp"></span><button class="btn pri tknew" data-a="taskEdit" data-id="" data-d="${day}" title="New task" aria-label="New task">${ic('plus')}<span>New task</span></button></div>`;
   let body='';
   if(tab==='board')body=`<div class="kb">${cols.map(([k,l])=>tkColumn(k,l,list.filter(t=>taskState(t,day)===k),day)).join('')}</div>`;
   else if(tab==='list')body=`<div id="tkbody">${tkListBody(day)}</div>`;

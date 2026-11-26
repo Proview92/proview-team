@@ -641,3 +641,23 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
 .pnl .pb .f2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .pnl .pb .f2>*{min-width:0}.pnl .pb .f2 input,.pnl .pb .f2 select{min-width:0;max-width:100%}
 .mdn{flex:1;min-width:0}.mdn h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mdh .btn{flex:none}
+
+/* Get started: a slim welcome strip with Dismiss in it, so nothing needs scrolling to reach (owner, 26 Nov 2026) */
+.onbw{padding:10px 14px 12px;margin-bottom:10px}
+.onbw-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.onbw-h h2{margin:0;font-size:17px}
+.onbw-h .mut{font-size:13px;font-weight:600}
+.onbw .prog{height:6px}
+.onbr{padding:12px 16px}
+@media(max-width:600px){.onbr{padding:10px 12px;gap:8px}.onbw-h{gap:4px 10px}}
+/* Tasks on a phone: the date, Today and New task share one row */
+@media(max-width:600px){
+  .tkbar{gap:6px}
+  .tkbar .dn{flex:1 1 0;min-width:0}
+  .tkbar .dn span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
+  .tkbar .sp{display:none}
+  .tkbar .tknew{flex:none;width:44px;padding:0}
+  .tkbar .tknew span{display:none}
+  .tkbar input[type=search]{order:9;flex:0 0 100%}
+}
+@media(max-width:359px){.onbw-h .mut{display:none}}
