@@ -128,7 +128,7 @@ function viewOps(ops, u, st) {
 // What each feature switch lets a manager change.
 const WF = {
   entries: ['timesheets', 'approvals'], shifts: ['rota'], cover: ['rota'], rotaRules: ['rota'], schedules: ['rota', 'settings'],
-  tasks: ['tasks'], tkLib: ['tasks'], leave: ['timeoff'], policies: ['timeoff', 'settings'], calendars: ['settings', 'timeoff'],
+  tasks: ['tasks'], tkLib: ['tasks'], tkPhotos: ['tasks'], leave: ['timeoff'], policies: ['timeoff', 'settings'], calendars: ['settings', 'timeoff'],
   avail: ['rota', 'timeoff'], exports: ['reports'], payslips: ['payslips'], payMap: ['payslips'], docSet: ['people', 'settings'],
   org: ['settings'], perms: ['settings'], tt: ['settings'], locations: ['settings'], groups: ['people', 'settings'],
   activities: ['settings'], projects: ['settings'], clients: ['settings'], onb: ['settings'], otPol: ['settings']
@@ -144,6 +144,7 @@ function ownUp(k, x, ex, u) {
     case 'chat': return x.from === u.id && (!ex || ex.from === u.id);
     case 'notifs': return true;
     case 'tasks': return true;
+    case 'tkPhotos': return x.by === u.id && !ex && typeof x.data === 'string' && x.data.length < 400000; // staff add their own task photos, never change one
     case 'shifts':
       return !!ex && (ex.pid === u.id || (!ex.pid && ex.cover && ex.cover.open)) && (x.pid == null || x.pid === u.id);
     default: return false;
@@ -154,6 +155,7 @@ function ownDel(k, ex, u) {
   switch (k) {
     case 'entries': case 'leave': case 'avail': return ex.pid === u.id;
     case 'chat': return ex.from === u.id;
+    case 'tkPhotos': return ex.by === u.id;
     case 'notifs': return ex.to === u.id;
     default: return false;
   }

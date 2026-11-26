@@ -686,3 +686,15 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
   table.doct .reqs{display:flex;flex-wrap:wrap;gap:4px}
   table.doct{width:100%}
 }
+
+/* Photos on tasks */
+.tkph{margin-top:12px}.tkph h3{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.tkph-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-bottom:8px}
+.tkph-t{display:flex;flex-direction:column;gap:3px;padding:0;border:1px solid var(--line);background:var(--card);cursor:pointer;text-align:left;color:inherit;font:inherit;min-width:0}
+.tkph-t img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+.tkph-t small{padding:2px 6px 5px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkph-t:hover{border-color:var(--pri)}
+.tkph-add{min-height:48px;cursor:pointer}
+.tkph-v{display:grid;gap:10px}.tkph-v img{display:block;width:100%;max-height:62vh;object-fit:contain;background:#000}.tkph-v p{margin:0}
+.tkph-c{display:inline-flex;align-items:center;gap:3px}.tkph-c svg{width:13px;height:13px}
+.tkpd{margin-bottom:10px}.tkpd .tkph-g{margin-bottom:0;grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
