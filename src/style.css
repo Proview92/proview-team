@@ -724,3 +724,10 @@ select:not(.gsel):not([multiple]):not([size]){-webkit-appearance:none;appearance
 
 /* No pinch or double-tap zoom on touch screens; one-finger scrolling in both directions stays */
 html,body{touch-action:pan-x pan-y}
+
+/* side-by-side cards: same height, same header height, empty message centred */
+.two:has(>.card>.hd){align-items:stretch}
+.two>.card:has(>.hd){display:flex;flex-direction:column}
+.two>.card>.hd{min-height:58px;flex-wrap:nowrap}
+.two>.card>.empty{flex:1;display:flex;flex-direction:column;justify-content:center}
+.two>.card>.empty b{margin-bottom:0}
