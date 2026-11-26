@@ -711,3 +711,9 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
   .ppbar .ppadd{flex:none}
 }
 @media(max-width:600px){.ppbar .ppadd{width:44px;padding:0}.ppbar .ppadd span{display:none}}
+/* People list on a phone: name with role, and group. The rest is one tap away. Rows are half the height. */
+@media(max-width:600px){
+  .ppbar+.card.tw table.t{width:100%}
+  .ppbar+.card.tw table.t tr>:nth-child(n+2):not(:nth-child(3)):not([colspan]){display:none}
+  .ppbar+.card.tw table.t tr>:nth-child(3){text-align:right;white-space:nowrap}
+}
