@@ -731,3 +731,8 @@ html,body{touch-action:pan-x pan-y}
 .two>.card>.hd{min-height:58px;flex-wrap:nowrap}
 .two>.card>.empty{flex:1;display:flex;flex-direction:column;justify-content:center}
 .two>.card>.empty b{margin-bottom:0}
+/* add member: enter saves and opens a fresh form */
+.pf-hint{color:var(--mut);font-size:13px;align-self:center}
+@media(max-width:860px){ .pf-hint{display:none} }
+.ag-s{display:none}
+@media(max-width:600px){ .ag-l{display:none} .ag-s{display:inline} .pnl .pf:has(.pf-again){flex-wrap:nowrap} .pnl .pf:has(.pf-again) .btn{padding-left:12px;padding-right:12px;white-space:nowrap} .pnl .pf:has(.pf-again) .sp{display:none} }

@@ -263,7 +263,7 @@ I.loc=(el)=>{ U.loc=el.value; render() };
 
 /* ---------- panels, modals, toast ---------- */
 let PN=null;
-function openPanel(o){ PN=o; $('#pnl-root').innerHTML=`<div class="pbd" data-a="pbd"></div><aside class="pnl ${o.wide?'wide':''} ${o.small?'sm':''} ${o.multi?'multi':''}" role="dialog" aria-modal="true" aria-label="${esc(o.title)}"><div class="ph"><h2>${esc(o.title)}</h2><button class="ib" data-a="pclose" aria-label="Close">${ic('x')}</button></div><div class="pb" id="pnl-body" tabindex="0">${o.body}</div>${o.nofoot?'':`<div class="pf">${o.left||''}<span class="sp"></span><button class="btn" data-a="pclose">${o.cancel||'Cancel'}</button>${o.save?`<button class="btn pri" data-a="psave">${o.saveLabel||'Save'}</button>`:''}</div>`}</aside>`; requestAnimationFrame(()=>{const b=$('.pbd'),p=$('.pnl'); b&&b.classList.add('on'); p&&p.classList.add('on'); const f=$('#pnl-body input:not([type=checkbox]):not([type=hidden]),#pnl-body select,#pnl-body textarea'); if(f&&!o.nofocus&&window.innerWidth>860)f.focus()}); const pbx=$('#pnl-body'); if(pbx&&!(document.activeElement&&pbx.contains(document.activeElement))&&(o.nofocus||window.innerWidth<=860||!pbx.querySelector('input:not([type=checkbox]):not([type=hidden]),select,textarea')))pbx.focus({preventScroll:true}); fixInputs(document); o.onOpen&&o.onOpen($('#pnl-body')); pnlFit(o) }
+function openPanel(o){ PN=o; $('#pnl-root').innerHTML=`<div class="pbd" data-a="pbd"></div><aside class="pnl ${o.wide?'wide':''} ${o.small?'sm':''} ${o.multi?'multi':''}" role="dialog" aria-modal="true" aria-label="${esc(o.title)}"><div class="ph"><h2>${esc(o.title)}</h2><button class="ib" data-a="pclose" aria-label="Close">${ic('x')}</button></div><div class="pb" id="pnl-body" tabindex="0">${o.body}</div>${o.nofoot?'':`<div class="pf">${o.left||''}<span class="sp"></span><button class="btn" data-a="pclose">${o.cancel||'Cancel'}</button>${o.save&&o.again?`<button class="btn pf-again" data-a="psave" data-again="1">${o.againLabel||'<span class="ag-l">Save and add another</span><span class="ag-s">Save and next</span>'}</button>`:''}${o.save?`<button class="btn pri" data-a="psave">${o.saveLabel||'Save'}</button>`:''}</div>`}</aside>`; requestAnimationFrame(()=>{const b=$('.pbd'),p=$('.pnl'); b&&b.classList.add('on'); p&&p.classList.add('on'); const f=$('#pnl-body input:not([type=checkbox]):not([type=hidden]),#pnl-body select,#pnl-body textarea'); if(f&&!o.nofocus&&window.innerWidth>860)f.focus()}); const pbx=$('#pnl-body'); if(pbx&&!(document.activeElement&&pbx.contains(document.activeElement))&&(o.nofocus||window.innerWidth<=860||!pbx.querySelector('input:not([type=checkbox]):not([type=hidden]),select,textarea')))pbx.focus({preventScroll:true}); fixInputs(document); o.onOpen&&o.onOpen($('#pnl-body')); pnlFit(o) }
 /* Big screens (owner, 26 Nov 2026):
    - a long form gets two columns by itself, so there is little or no scrolling (Edit person has its own three);
    - on Time off, forms open at the side with the calendar still in view, as booking details do in Proview Reservations. */
@@ -274,7 +274,7 @@ function pnlFit(o){ const e=$('#pnl-root .pnl'), bd=$('#pnl-root .pbd'); if(!e)r
 function closePanel(){ PN=null; const r=$('#pnl-root'); if(r)r.innerHTML=''; document.body.classList.remove('has-dock') }
 A.pclose=()=>closePanel();
 A.pbd=()=>{ if(PN&&PN.save)return; closePanel() }; /* tapping the dim area never throws away a half-filled form */
-A.psave=()=>{ if(!PN||!PN.save)return; const body=$('#pnl-body'); let r; try{ r=PN.save(formVals(body),body) }catch(e){ toast('Could not save: '+(e&&e.message||e)); return } if(r!==false){closePanel()} };
+A.psave=d=>{ if(!PN||!PN.save)return; const body=$('#pnl-body'); const ag=d&&d.again&&PN.again; let r; try{ r=PN.save(formVals(body),body) }catch(e){ toast('Could not save: '+(e&&e.message||e)); return } if(r!==false){closePanel(); if(ag)ag()} };
 function modal(html,big){ $('#mdl-root').innerHTML=`<div class="mdl" data-mdl="1"><div class="sheet ${big?'big':''}" role="dialog" aria-modal="true">${html}</div></div>`; const f=$('#mdl-root input:not([type=checkbox])'); if(f&&window.innerWidth>860)f.focus() }
 function closeModal(){ $('#mdl-root').innerHTML='' }
 A.mclose=()=>closeModal();
@@ -319,7 +319,7 @@ document.addEventListener('keydown',e=>{ if(!PN)return; const pb=$('#pnl-body');
   if(e.key==='PageDown'||e.key==='PageUp'){ pb.scrollBy({top:(e.key==='PageDown'?1:-1)*pb.clientHeight*.85}); e.preventDefault(); return }
   if(e.key==='Home'&&!typing&&e.target===pb){ pb.scrollTo({top:0}); e.preventDefault(); return } if(e.key==='End'&&!typing&&e.target===pb){ pb.scrollTo({top:pb.scrollHeight}); e.preventDefault(); return }
   if((e.key==='ArrowDown'||e.key==='ArrowUp')&&!typing){ pb.scrollBy({top:(e.key==='ArrowDown'?1:-1)*70}); e.preventDefault(); return }
-  if(e.key==='Enter'&&PN.save&&tag==='INPUT'&&!['checkbox','radio','button','submit','file','date','time'].includes(ty)&&!t.dataset.enter){ e.preventDefault(); A.psave() } });
+  if(e.key==='Enter'&&PN.save&&tag==='INPUT'&&!['checkbox','radio','button','submit','file','date','time'].includes(ty)&&!t.dataset.enter){ e.preventDefault(); A.psave(PN.again?{again:1}:null) } });
 
 /* ---------- global events ---------- */
 document.addEventListener('click',e=>{
