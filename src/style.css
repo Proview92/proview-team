@@ -640,3 +640,4 @@ table.dayone tr>:nth-child(11):not([colspan]){display:table-cell}
 /* two boxes side by side never push a small pop-up wider than itself (date boxes on touch screens did) */
 .pnl .pb .f2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .pnl .pb .f2>*{min-width:0}.pnl .pb .f2 input,.pnl .pb .f2 select{min-width:0;max-width:100%}
+.mdn{flex:1;min-width:0}.mdn h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mdh .btn{flex:none}
