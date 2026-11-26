@@ -515,7 +515,15 @@ table.rota tr.grph td{position:sticky;left:0}
 .top{container:hdr/inline-size}
 @container hdr (max-width:960px){.top>.pv-dash{width:38px;padding:0;justify-content:center}.top>.pv-dash span{display:none}.top>.sv{font-size:0;gap:0}.top>.sv:before{width:9px;height:9px}}
 @media (max-width:700px){.top>.pv-dash{width:34px;height:34px}}
+/* two rows only when it is really needed: under 620px, or under 780px when there is a location picker (26 Nov 2026) */
 @container hdr (max-width:780px){
+  .top:has(#locsel)>.mnu,.top:has(#locsel)>h1,.top:has(#locsel)>.pv-dash,.top:has(#locsel)>.top-me{order:0}
+  .top:has(#locsel)>h1{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .top:has(#locsel)>.hdr-br{display:block;order:1;flex:0 0 100%;height:0}
+  .top:has(#locsel)>:not(.mnu):not(h1):not(.pv-dash):not(.top-me):not(.hdr-br){order:2}
+  .top:has(#locsel)>.sv{margin-left:auto}
+}
+@container hdr (max-width:620px){
   .top>.mnu,.top>h1,.top>.pv-dash,.top>.top-me{order:0}
   .top>h1{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .top>.hdr-br{display:block;order:1;flex:0 0 100%;height:0}
@@ -533,3 +541,43 @@ table.rota tr.grph td{position:sticky;left:0}
 .dline-go svg{flex:none}
 .dline-go:focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:8px}
 .dline-min{flex:none;width:40px;min-width:40px;height:40px;padding:0;display:grid;place-items:center}
+
+/* ===== One look with Proview Reservations (owner, 26 Nov 2026) =====
+   Square corners everywhere in the app, its pop-ups and the kiosk. Things that are meant to be round stay round. */
+:is(#app,#pnl-root,#mdl-root,#kiosk-root) *,#toast,.pv-acct,.pv-acct *{border-radius:0!important}
+:is(#app,#pnl-root,#mdl-root,#kiosk-root) :is(.av,.cal .dc .dn2,.map .geo,.donut,.donut div,.clrrow .sw,.doctnote i,.sw2 i:after){border-radius:50%!important}
+:is(#app,#pnl-root,#mdl-root,#kiosk-root) :is(.nv .bdg,.ib .dot,.bdg2,.tabs button small,.prog,.prog i,.sw2 i,.cell.rest span){border-radius:99px!important}
+:is(#app,#pnl-root,#mdl-root,#kiosk-root) .chip{border-radius:3px!important}
+.pv-acct .hub-av{border-radius:0!important}
+/* Phone: the header is one row (menu, page name, chat, bell, account). Search, Inbox and the pay eye are in the menu. */
+.ph-only{display:none}
+@media(max-width:600px){
+  .app:not(.navb) .side .ph-only{display:flex}
+  .app:not(.navb) .top{flex-wrap:nowrap;padding:8px 10px;gap:6px}
+  .app:not(.navb) .top>*{order:0!important}
+  .app:not(.navb) .top>.hdr-br,.app:not(.navb) .top>.sv,.app:not(.navb) .top>.hd-x{display:none!important}
+  .app:not(.navb) .top>.top-me{margin-left:0}
+  .app:not(.navb) .top:has(#locsel){flex-wrap:wrap}
+  .app:not(.navb) .top:has(#locsel)>.hdr-br{display:block!important;order:1!important;flex:0 0 100%;height:0}
+  .app:not(.navb) .top:has(#locsel)>#locsel{order:2!important;flex:1;max-width:none}
+  .content{padding:10px 10px 40px}
+  .stats{gap:8px}
+}
+/* Tablet held upright: the weekly timesheet fits without sliding sideways */
+@media(min-width:700px) and (max-width:1100px){
+  table.t:has(button.cell) th,table.t:has(button.cell) td{padding-left:3px;padding-right:3px}
+  table.t:has(button.cell) th:first-child,table.t:has(button.cell) td:first-child{padding-left:12px}
+  table.t:has(button.cell) .cell.rest span{padding:1px 4px}
+}
+/* Long forms (Edit person): wide with two or three columns on tablet and laptop, so there is little or no scrolling */
+.psec{break-inside:avoid}
+@media(min-width:760px){
+  .pnl.multi{width:min(980px,calc(100vw - 32px))}
+  .pnl.multi .pb{column-count:2;column-gap:28px;padding-top:14px}
+  .pnl.multi .pb .psec>h3:first-child{margin-top:0}
+  .pnl.multi .pb .psec{margin:0 0 10px}
+}
+@media(min-width:1100px){
+  .pnl.multi{width:min(1180px,calc(100vw - 48px))}
+  .pnl.multi .pb{column-count:3}
+}
