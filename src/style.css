@@ -840,3 +840,9 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 #kiosk-root .kx-st{width:100%;white-space:normal}
 #kiosk-root .kx-st span{min-width:0;overflow-wrap:anywhere;line-height:1.25}
 .kx-tx{overflow:hidden}
+/* board: cards stay inside their column, long titles wrap */
+.kb>*{min-width:0}
+.kb .colm>*{min-width:0}
+.tk.c{min-width:0;overflow:hidden}
+.tk.c .tkr{min-width:0;align-items:flex-start}
+.tk.c .tkr b{white-space:normal;overflow-wrap:anywhere;line-height:1.25}
