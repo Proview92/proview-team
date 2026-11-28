@@ -292,7 +292,7 @@ table.t td small{display:block}
 @media print{.side,.top,.tbar,.pnl,.pbd,#toast,.noprint{display:none!important}.app{display:block;height:auto}.content{overflow:visible}body{background:#fff}}
 
 .sch{display:grid;grid-template-columns:270px minmax(0,1fr);gap:14px;align-items:start}
-@media(max-width:860px){.sch{grid-template-columns:1fr}}
+@media(max-width:860px){.sch{grid-template-columns:minmax(0,1fr)}}
 details>summary{list-style:none}details>summary::-webkit-details-marker{display:none}
 
 .nvrow{display:flex;gap:6px}.nvrow .nv{justify-content:center;padding:8px}.col .nvrow{flex-direction:column}
@@ -881,3 +881,13 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 /* roles: quick add */
 .rq{margin-bottom:14px;padding:16px 18px}.rq h3{margin:0 0 4px}.rq-b{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .rq-b .btn{min-height:46px;font-size:16px;padding:0 16px}.rq-b .btn.rq-on{opacity:.6;cursor:default}
+
+/* schedule editor: fold-away sections and a save bar that stays in view */
+.sdf{border:1px solid var(--line);border-radius:10px;margin-top:8px}
+.sdf-h{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 14px;background:none;border:0;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.sdf-h b{font-size:16px;white-space:nowrap}.sdf-h small{flex:1;min-width:0;color:var(--mut);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+.sdf-b{padding:4px 14px 14px;border-top:1px solid var(--line)}
+.sdsave{position:sticky;bottom:-40px;background:var(--card);margin:14px -16px -16px;padding:12px 16px;border-top:1px solid var(--line);z-index:2}
+.sch-back{display:none;margin-bottom:12px;min-height:46px}
+@media(max-width:860px){.sch.ed>.card:first-child{display:none}.sch-back{display:inline-flex}}
+@media(max-width:560px){.sdf-h{flex-wrap:wrap;gap:2px 12px}.sdf-h b{flex:1}.sdf-h small{flex:0 0 100%;order:3;text-align:left;white-space:normal}}
