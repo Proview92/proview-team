@@ -128,7 +128,7 @@ function viewOps(ops, u, st) {
 // What each feature switch lets a manager change.
 const WF = {
   entries: ['timesheets', 'approvals'], shifts: ['rota'], cover: ['rota'], rotaRules: ['rota'], schedules: ['rota', 'settings'],
-  tasks: ['tasks'], tkLib: ['tasks'], tkPhotos: ['tasks'], leave: ['timeoff'], policies: ['timeoff', 'settings'], calendars: ['settings', 'timeoff'],
+  tasks: ['tasks'], tkLib: ['tasks'], tkPhotos: ['tasks'], deliv: ['tasks'], delivSup: ['tasks', 'settings'], leave: ['timeoff'], policies: ['timeoff', 'settings'], calendars: ['settings', 'timeoff'],
   avail: ['rota', 'timeoff'], exports: ['reports'], payslips: ['payslips'], payMap: ['payslips'], docSet: ['people', 'settings'],
   org: ['settings'], perms: ['settings'], tt: ['settings'], locations: ['settings'], groups: ['people', 'settings'],
   activities: ['settings'], projects: ['settings'], clients: ['settings'], onb: ['settings'], otPol: ['settings']
@@ -145,6 +145,7 @@ function ownUp(k, x, ex, u) {
     case 'notifs': return true;
     case 'tasks': return true;
     case 'tkPhotos': return x.by === u.id && !ex && typeof x.data === 'string' && x.data.length < 400000; // staff add their own task photos, never change one
+    case 'deliv': return x.by === u.id && !ex && !x.rep && !x.got && (!x.ph || (typeof x.ph === 'string' && x.ph.length < 400000)); // staff note a delivery problem, never change one
     case 'shifts':
       return !!ex && (ex.pid === u.id || (!ex.pid && ex.cover && ex.cover.open)) && (x.pid == null || x.pid === u.id);
     default: return false;
@@ -182,7 +183,16 @@ function checkOps(ops, u) {
     }
     if (o.unset) { dropped++; return; }
     const wf = WF[k];
-    if (wf && wf.some(f => feat(u, f))) { ok.push(o); return; }
+    if (wf && wf.some(f => feat(u, f))) {
+      // tasks and the deliveries log: managers add and change, only the owner or an admin deletes
+      if (k === 'tasks' || k === 'deliv') {
+        if ('set' in o) { dropped++; return; }
+        const nd = (o.del || []).filter(id => !findIn(st, k, id)); dropped += (o.del || []).length - nd.length;
+        if ((o.up || []).length || nd.length) ok.push({ k, up: o.up || [], del: nd });
+        return;
+      }
+      ok.push(o); return;
+    }
     if ('set' in o) { dropped++; return; }
     const up = [], del = [];
     (o.up || []).forEach(x => { if (ownUp(k, x, findIn(k, x.id), u)) up.push(x); else dropped++; });
