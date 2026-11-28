@@ -855,6 +855,18 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 .tk.c{min-width:0;overflow:hidden}
 .tk.c .tkr{min-width:0;align-items:flex-start}
 .tk.c .tkr b{white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+/* QR clock-in */
+.qr-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px}
+.qr-card .tx{flex:1;min-width:200px;display:grid;gap:2px}
+.qr-card .tx small{color:var(--mut)}
+.qrbox{background:#fff;padding:6px;max-width:340px;margin:0 auto;border:1px solid var(--line)}
+.qrbox svg{display:block;width:100%;height:auto}
+.kq-box{position:relative;flex:1;min-height:260px;background:#000;overflow:hidden;display:grid;place-items:center}
+.kq-box video{width:100%;height:100%;max-height:62vh;object-fit:cover;display:block}
+.kq-box.mir video{transform:scaleX(-1)}
+.kq-frame{position:absolute;width:min(56vmin,340px);height:min(56vmin,340px);border:4px solid #fff;box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none}
+#kqm{margin:0;text-align:center;font-size:19px;font-weight:700;color:#fff;min-height:28px}
+#kqm.kq-bad{color:#ff8a8a}
 /* ===== Proview shell: the same logo, sign-in page and loading page as the other Proview sites ===== */
 .pvlogo{display:block;width:30px;height:30px;flex:none;border-radius:22%;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22 viewBox=%220 0 64 64%22%3E%3Cdefs%3E%3ClinearGradient id=%22a-team%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2310B981%22/%3E%3Cstop offset=%221%22 stop-color=%22%23047857%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22b-team%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2356A7DC%22/%3E%3Cstop offset=%221%22 stop-color=%22%236C6FB6%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23111A33%22/%3E%3ClinearGradient id=%22pvg-team%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2355A8DE%22/%3E%3Cstop offset=%22.55%22 stop-color=%22%236B70B8%22/%3E%3Cstop offset=%221%22 stop-color=%22%2358A0DA%22/%3E%3C/linearGradient%3E%3Cpath transform=%22translate%287.00 12.45%29 scale%280.16529%29%22 d=%22M1.8 163.1 C-0.3 161.8 -0.3 161.7 0.5 160.5 C0.8 160.1 1.1 159.1 1.7 157.5 C2.1 156.1 2.7 154.5 3 153.8 C3.2 153.1 3.8 151.7 4.1 150.7 C4.4 149.7 5 148.3 5.3 147.5 C5.6 146.7 6.3 144.9 6.8 143.5 C7.3 142.1 8 140.1 8.4 139.1 C8.7 138.1 9.3 136.4 9.8 135.2 C10.2 134 11 131.5 11.7 129.7 C12.3 127.8 13.2 125.3 13.7 124 C14.1 122.7 14.6 121.4 14.8 121 C14.9 120.6 15.4 119.2 15.9 117.8 C16.4 116.3 17.3 113.9 17.9 112.3 C18.4 110.7 19.2 108.4 19.7 107.2 C20.1 105.9 20.7 104.3 21 103.6 C22.1 101 26.6 88.3 27.6 84.9 C30.1 76.9 33.3 69.4 34.5 68.3 C36 67.1 35.2 67.1 68.7 67 C84.4 67 97.9 67 98.8 67 C107.3 66.6 113.8 61 115.6 52.6 C117.7 42.1 110.6 32 100.2 30.9 C99.3 30.8 89 30.8 69 30.8 C39 30.8 38.4 30.8 37.4 30.3 C36.2 29.9 35.6 28.7 32 19.8 C31.5 18.6 30.8 16.9 30.4 15.9 C30 15 29.3 13.4 28.9 12.4 C28.5 11.5 27.8 9.8 27.4 8.6 C24.8 2.6 24.7 2 26.2 1.2 C27.3 0.7 108.5 0.9 111.6 1.4 C118.7 2.7 123.2 4.4 129.1 7.8 C133.8 10.6 138.6 14.8 141.4 18.5 C144.8 23.1 146.9 26.4 148.2 29.4 C149.7 32.9 151.4 38 151.8 40.1 C152.1 42.1 153.2 46 154.8 50.7 C155.8 53.4 157.1 57.5 157.9 59.8 C159.1 63.6 160.8 68.5 162.6 73.8 C163 74.9 163.5 76.3 163.7 76.9 C163.9 77.5 164.4 78.8 164.8 79.9 C165.2 81 166.4 84.5 167.5 87.8 C173.3 105 174.5 108.2 174.9 108.9 C175.4 109.7 176.2 109.7 176.8 109 C177 108.6 178.5 104.5 179.4 101.8 C179.6 100.9 180.5 98.5 181.2 96.4 C184.2 87.7 186.2 81.7 187.6 77.2 C188.1 75.6 193.2 59.8 196.5 49.9 C199.2 41.7 201.6 34.6 202.7 30.7 C203.1 29.5 203.5 28.3 203.6 28.1 C203.7 27.8 204.2 26 204.9 24 C207.8 14.9 208.3 13.3 208.8 11.9 C209.1 11.1 209.8 9 210.4 7.2 C211.9 2.6 212.2 1.9 213.6 1.6 C214.6 1.3 239.4 1.2 240.2 1.4 C240.8 1.6 241.4 2.2 241.4 2.6 C241.4 2.8 240.3 6.3 238 13.2 C237 16.3 236 19.2 235.9 19.8 C235.7 20.3 234.8 23.2 233.8 26.2 C232.8 29.2 231.8 32.5 231.5 33.5 C229.3 40.4 228.6 42.8 227.4 46.2 C225.2 53.2 223.8 57.5 222.7 61.2 C221.5 65.2 220.4 68.7 218.1 75.9 C217.2 78.5 216.1 82.1 215.5 83.8 C213.1 91.7 210.3 100.3 208.9 104.5 C208.4 106.2 207.4 109.1 206.9 111 C206.3 112.9 205.4 115.9 204.8 117.7 C204.2 119.5 203.6 121.4 203.4 122.1 C203.3 122.7 202.4 125.5 201.4 128.3 C200.5 131.1 199.3 135 198.8 136.8 C198.2 138.7 197.4 141.4 196.9 142.8 C196.5 144.3 195.9 146.1 195.7 147 C195.3 148.3 193.9 152.8 193.3 154.5 C191.8 158.8 191.4 159 183.5 159 C174.5 159 169.7 158.2 165.1 155.8 C161.3 153.8 158 149.7 156.3 144.6 C156.1 144 155.6 142.9 155.3 142 C154.7 140.3 152.5 134.2 151.1 130 C150.2 127.4 149 123.9 147.2 119 C146.7 117.7 146 115.7 145.7 114.6 C145.3 113.6 144.5 111.2 143.8 109.3 C139.7 97.9 138.7 95.1 137.8 92.3 C136.8 89.2 136.6 88.9 136.1 88.6 C135.3 88.1 134.6 88.4 133.1 89.8 C129.7 93 123.3 96.3 117.3 97.9 C110.5 99.7 109.7 99.7 79.9 99.8 C54.9 99.8 54.9 99.8 54.1 100.3 C53.2 100.9 52.2 103.5 50.7 108.9 C50.3 110.3 49.7 112.2 47.6 118.9 C47.2 120.5 46.7 122.2 46.5 122.7 C45.1 127.5 41.7 138 40.9 140.1 C40.6 140.7 40 142.2 39.6 143.4 C38.1 148 37 150.4 35.1 153.8 C33.8 156.2 33.7 156.4 31.5 158.5 C29.3 160.7 28.2 161.5 26 162.5 C25.1 162.9 24.4 163.3 24.1 163.6 L23.7 164 L13.4 164 L3.1 164 L1.8 163.1 Z%22 fill=%22url%28%23pvg-team%29%22/%3E%3Ccircle cx=%2246%22 cy=%2246%22 r=%2216.5%22 fill=%22%23111A33%22/%3E%3Ccircle cx=%2246%22 cy=%2246%22 r=%2215%22 fill=%22url%28%23a-team%29%22/%3E%3Cg transform=%22translate%2836.879999999999995 36.879999999999995%29 scale%280.76%29%22 fill=%22none%22 stroke=%22%23fff%22 color=%22%23fff%22 stroke-width=%221.974%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%222%22 y=%225%22 width=%2220%22 height=%2214%22 rx=%222.5%22/%3E%3Ccircle cx=%228.25%22 cy=%2210.75%22 r=%222.25%22/%3E%3Cpath d=%22M4.8 16.2c.6-1.5 1.9-2.2 3.5-2.2s2.9.75 3.5 2.2%22/%3E%3Cpath d=%22M14.5 10h4M14.5 14h3%22/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
 .pvword{font-size:15px;font-weight:500;letter-spacing:.04em;line-height:1.25;color:#fff;white-space:nowrap}
@@ -1890,8 +1902,8 @@ V.live=()=>{ const list=team(); const ps=list.map(p=>{ const e=by(S.entries.filt
 const KFLAG='pv-team-kiosk';
 const kFlag=v=>{ try{ if(v===undefined)return localStorage.getItem(KFLAG)==='1'; if(v)localStorage.setItem(KFLAG,'1'); else localStorage.removeItem(KFLAG) }catch(e){} return false };
 const kMgrPins=()=>S.people.filter(p=>!p.archived&&isMgr(p)&&p.pin).map(p=>String(p.pin));
-function kGo(){ U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
-function kOut(){ U.kiosk=false; U.kq=null; kFlag(false); clearTimeout(kT); $('#kiosk-root').innerHTML=''; if(U.wasLogin){ U.login=true; U.wasLogin=false } if(U.login)renderLogin() }
+function kGo(){ if(typeof qrEnsureCodes==='function')qrEnsureCodes(); U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
+function kOut(){ if(typeof qrStop==='function')qrStop(); U.kiosk=false; U.kq=null; kFlag(false); clearTimeout(kT); $('#kiosk-root').innerHTML=''; if(U.wasLogin){ U.login=true; U.wasLogin=false } if(U.login)renderLogin() }
 A.kiosk=()=>{ const m=me(); if(!U.login&&m&&isMgr(m)&&!kMgrPins().length){ modal(`<h2>Choose your PIN first</h2><p class="mut">The kiosk locks this device so staff can only clock in and out. You will need your PIN to exit it. 3 to 6 numbers.</p><input id="kspin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="PIN" aria-label="Your PIN" data-enter="kSetPin"><div class="r"><button class="btn" data-a="mclose">Cancel</button><button class="btn pri" data-a="kSetPin">Save and open kiosk</button></div>`); return } kGo() };
 A.kSetPin=()=>{ const v=(($('#kspin')||{}).value||'').trim(); if(!/^\d{3,6}$/.test(v)){ toast('PIN must be 3 to 6 numbers'); return } me().pin=v; closeModal(); commit(); kGo() };
 A.kexit=()=>{ if(!kMgrPins().length){ kOut(); return } U.kq={step:'pin',exit:true,pin:''}; renderKiosk(); kClose(30000) };
@@ -1901,9 +1913,11 @@ A.kopen=d=>{ const p=P(d.id); if(!p.licensed){ U.kq={pid:p.id,step:'msg',msg:'No
 A.kpad=d=>{ const q=U.kq; if(!q)return; if(q.exit){ const pins=kMgrPins(); if(d.v==='x')q.pin=q.pin.slice(0,-1); else if(d.v==='c')q.pin=''; else q.pin+=d.v; q.err=''; if(pins.includes(q.pin)){ kOut(); return } if(q.pin.length>=Math.max(...pins.map(x=>x.length))){ q.err='Wrong PIN'; q.pin='' } renderKiosk(); kClose(30000); return } const p=P(q.pid); if(d.v==='x'){q.pin=q.pin.slice(0,-1)} else if(d.v==='c'){q.pin=''} else q.pin+=d.v; if(q.pin.length>=p.pin.length){ if(q.pin===p.pin){q.step='act';q.pin=''} else {q.err='Wrong PIN';q.pin=''} } else q.err=''; renderKiosk(); kClose(30000) };
 A.kact=d=>{ const q=U.kq; doClock(q.pid,d.k,{src:'kiosk'},ok=>{ if(!ok){kClose();return} const t=fT(nowMin()); q.step='msg'; q.msg={in:'Clocked in at '+t,out:'Clocked out at '+t,bstart:'Break started at '+t,bend:'Back from break at '+t}[d.k]; q.ok=true; renderKiosk(); kClose(2500) }) };
 A.kcancel=()=>kClose();
-A.kqr=()=>{ U.kq={step:'msg',msg:'QR clock-in needs the online version, where each phone scans a code. Tap your name here instead.'}; renderKiosk(); kClose(6000) };
 function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.innerHTML='';return}
+  const _kf=!!U.kForce;
   { const ae=document.activeElement; if(U.kq&&ae&&ae.closest&&ae.closest('#kiosk-root')&&/^(INPUT|TEXTAREA)$/.test(ae.tagName)&&ae.type!=='file'&&!U.kForce)return; U.kForce=false } /* someone is typing on the kiosk: do not redraw under them */
+  if(U.kq&&U.kq.step==='qr'&&$('#kqv')&&!_kf)return; /* the camera is showing: do not redraw it */
+  if((!U.kq||U.kq.step!=='qr')&&typeof qrStop==='function')qrStop();
   if(typeof kFixGate==='function')kFixGate(U.kq);
   if(U.kHold&&Date.now()-U.kHold<180000&&$('#kxb'))return; /* the camera is open: do not redraw, or the photo would be lost */
   const ppl=S.people.filter(p=>!p.archived&&!p.noTrack); const q=U.kq; let pop='';
@@ -1912,10 +1926,11 @@ function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.i
     else if(q.step==='act'){ const w=whoState(p); inner=`<div class="who" style="justify-content:center">${av(p,'lg')}</div><h2 style="text-align:center">Hi ${esc(p.name.split(' ')[0])}</h2><p style="text-align:center;margin:0">${stChipFull(w)}</p><div style="display:grid;gap:10px">${w.st==='out'?`<button class="btn pri lg" data-a="kact" data-k="in">${ic('play')}Clock in</button>`:w.st==='break'?`<button class="btn pri lg" data-a="kact" data-k="bend">${ic('coffee')}End break</button><button class="btn lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`:`<button class="btn lg" data-a="kact" data-k="bstart">${ic('coffee')}Start break</button><button class="btn pri lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`}${typeof kMoreBtns==='function'?kMoreBtns(p):''}</div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>` }
     else if(q.step==='fix'&&p)inner=kFixHtml(q);
     else if(q.step==='deliv'&&p)inner=kDelivHtml(q);
+    else if(q.step==='qr')inner=kQrHtml(q);
     else if(q.step==='tasks'&&p)inner=kTasksHtml(q);
     else if(q.step==='rota'&&p)inner=kRotaHtml(q);
     else inner=`<h2 style="text-align:center">${q.ok?'✓ ':''}${esc(q.msg||'')}</h2>`;
-    const wide=q.step==='tasks'||q.step==='rota'||q.step==='deliv'; pop=`<div class="mdl ${wide?'kx':''}" style="z-index:5"><div class="sheet ${wide?'kx-sheet':''}" style="background:#1a2036;color:#f2f4fa;${wide?'':'max-width:420px'}" role="dialog" aria-modal="true">${inner}</div></div>` }
+    const wide=q.step==='tasks'||q.step==='rota'||q.step==='deliv'||q.step==='qr'; pop=`<div class="mdl ${wide?'kx':''}" style="z-index:5"><div class="sheet ${wide?'kx-sheet':''}" style="background:#1a2036;color:#f2f4fa;${wide?'':'max-width:420px'}" role="dialog" aria-modal="true">${inner}</div></div>` }
   const _kb=$('#kxb'), _ks=_kb?_kb.scrollTop:0;
   r.innerHTML=`<div class="kiosk"><div class="kh"><span class="brandk">PROVIEW KIOSK · ${esc(S.org.name.toUpperCase())}</span><span class="sp"></span><button class="btn" data-a="kqr">${ic('qr')}Scan QR code</button><button class="btn" data-a="kexit">Exit kiosk</button></div><div class="ktime"><b data-live="clock" data-sec="1">${pad(new Date().getHours())}:${pad(new Date().getMinutes())}:${pad(new Date().getSeconds())}</b><span data-live="date">${fdl(today())}</span></div><p style="text-align:center;color:#aab2c8;margin:0">Tap your name to clock in or out, see today's checklist or the rota</p><div class="kg">${ppl.map(p=>{ const w=whoState(p); return `<button class="kt ${w.st==='in'?'in':w.st==='break'?'br':''}" data-a="kopen" data-id="${p.id}">${av(p)}<b>${esc(p.name)}</b><small>${w.st==='in'?'Clocked in '+fT(w.e.in):w.st==='break'?'On break':'Clocked out'}</small></button>`}).join('')}</div>${pop}</div>`; const _nb=$('#kxb'); if(_nb&&_ks)_nb.scrollTop=_ks }
 
@@ -3733,6 +3748,54 @@ A.kDvSave=()=>{ const q=U.kq; if(!q||!q.dv)return; const v=q.dv; const fail=m=>{
   if(!String(v.sup||'').trim())return fail('Choose the supplier.'); if(!String(v.item||'').trim())return fail('Write the item or product.');
   const n={id:uid(),d:today(),sup:String(v.sup).trim(),item:String(v.item).trim(),qty:String(v.qty||'').trim(),kind:v.kind||'missing',note:'',by:q.pid,at:Date.now()}; if(v.ph)n.ph=v.ph;
   S.deliv.push(n); q.dv=null; q.step='msg'; q.msg='Saved. The manager can see it in the deliveries log.'; U.kForce=true; commit(); renderKiosk(); kClose(2500) };
+
+/* ---- 60-qr.js ---- */
+/* ===== QR clock-in (28 Nov 2026) =====
+   Each person has "My QR code" in their own login. It changes every 30 seconds, so a screenshot is no use.
+   The kiosk tablet reads it with its camera and opens that person, the same as name and PIN.
+   The code is signed with the person's kiosk code, which other staff cannot see. */
+const QR_STEP=30;
+function loadLib(src,test){ return new Promise((res,rej)=>{ if(test())return res(); const s=document.createElement('script'); s.src=src; s.onload=()=>test()?res():rej(new Error('lib')); s.onerror=()=>rej(new Error('load')); document.head.appendChild(s) }) }
+async function qrSig(secret,msg){ const enc=new TextEncoder(); const key=await crypto.subtle.importKey('raw',enc.encode('pvq1|'+secret),{name:'HMAC',hash:'SHA-256'},false,['sign']); const b=new Uint8Array(await crypto.subtle.sign('HMAC',key,enc.encode(msg))); return [...b.slice(0,6)].map(x=>x.toString(16).padStart(2,'0')).join('') }
+const qrWin=()=>Math.floor(Date.now()/1000/QR_STEP);
+const qrSecret=p=>String(p.code||'')+'|'+p.id;
+async function qrMake(p){ const w=qrWin(); return 'PVQ1.'+p.id+'.'+w+'.'+await qrSig(qrSecret(p),p.id+'.'+w) }
+async function qrCheck(txt){ const m=/^PVQ1\.([A-Za-z0-9_-]+)\.(\d+)\.([0-9a-f]{12})$/.exec(String(txt||'').trim()); if(!m)return {err:'other'}; const p=P(m[1]); if(!p||p.archived)return {err:'who'}; const w=+m[2]; if(Math.abs(qrWin()-w)>2)return {err:'old',p}; if(await qrSig(qrSecret(p),p.id+'.'+w)!==m[3])return {err:'bad',p}; return {p} }
+/* ---- my code, on the person's own phone ---- */
+function qrCard(){ const m=me(); if(!m||m.noTrack)return ''; return `<div class="card pad qr-card"><div class="tx"><b>My QR code</b><small>Hold it up to the tablet at work to clock in or out without typing a PIN.</small></div><button class="btn pri" data-a="qrMine">${ic('qr')}Show my QR code</button></div>` }
+{ const _c=V.clock; V.clock=()=>_c()+qrCard() }
+let qrT=null;
+async function qrDraw(){ const box=$('#qrbox'); if(!box){ clearInterval(qrT); qrT=null; return } const m=me(); const w=qrWin(); const left=QR_STEP-Math.floor(Date.now()/1000)%QR_STEP; const c=$('#qrleft'); if(c)c.textContent='New code in '+left+'s';
+  if(box.dataset.w===String(w))return; box.dataset.w=String(w);
+  try{ const txt=await qrMake(m); const q=qrcode(0,'M'); q.addData(txt); q.make(); box.innerHTML=q.createSvgTag({cellSize:8,margin:4,scalable:true}) }catch(e){ box.innerHTML='<p style="color:#b00020;padding:20px">Could not make the code on this device.</p>' } }
+A.qrMine=async()=>{ const m=me(); if(!m)return; modal(`<h2>${esc(m.name)}</h2><p class="mut" style="margin:0 0 10px">Hold this up to the tablet's camera.</p><div id="qrbox" class="qrbox" aria-label="Your QR code"><p style="padding:30px;color:#333">Making your code…</p></div><p id="qrleft" class="mut" style="text-align:center;margin:8px 0 0;font-variant-numeric:tabular-nums"></p><div class="r"><button class="btn pri" data-a="mclose">Close</button></div>`);
+  try{ await loadLib('vendor/qrgen.min.js',()=>typeof qrcode==='function') }catch(e){ const b=$('#qrbox'); if(b)b.innerHTML='<p style="color:#b00020;padding:20px">Could not load the QR code. Check the internet connection and try again.</p>'; return }
+  clearInterval(qrT); qrT=setInterval(qrDraw,1000); qrDraw() };
+/* ---- the tablet reads it ---- */
+const QRS={stream:null,timer:null,busy:false,last:'',lastAt:0,cv:null};
+function qrStop(){ clearInterval(QRS.timer); QRS.timer=null; if(QRS.stream){ try{ QRS.stream.getTracks().forEach(t=>t.stop()) }catch(e){} QRS.stream=null } }
+function qrMsg(t,bad){ if(U.kq&&U.kq.step==='qr'){ U.kq.msg=t; U.kq.bad=!!bad } const el=$('#kqm'); if(el){ el.textContent=t; el.className=bad?'kq-bad':'' } }
+function kQrHtml(q){ return `<div class="kx-hd"><div><h2>Hold your QR code up to the camera</h2><p>On your phone: Time clock, then Show my QR code.</p></div><button class="btn" data-a="kQrFlip">${ic('refresh')}<span>Other camera</span></button><button class="btn pri" data-a="kcancel">Cancel</button></div><p id="kqm" class="${q.bad?'kq-bad':''}">${esc(q.msg||'')}</p><div class="kq-box ${U.kCam==='environment'?'':'mir'}"><video id="kqv" playsinline muted autoplay></video><div class="kq-frame" aria-hidden="true"></div></div>` }
+async function qrStart(){ qrStop(); qrMsg('Starting the camera…');
+  try{ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('nocam'); await loadLib('vendor/jsqr.min.js',()=>typeof jsQR==='function');
+    const st=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:U.kCam||'user',width:{ideal:1280},height:{ideal:720}}});
+    if(!U.kiosk||!U.kq||U.kq.step!=='qr'){ st.getTracks().forEach(t=>t.stop()); return }
+    QRS.stream=st; const v=$('#kqv'); if(!v){ qrStop(); return } v.srcObject=st; try{ await v.play() }catch(e){}
+    qrMsg('Looking for a code…'); QRS.timer=setInterval(qrTick,220) }
+  catch(e){ qrStop(); const n=e&&e.name; U.kq={step:'msg',msg:n==='NotAllowedError'?'The camera is blocked on this tablet. Allow the camera for this site in the browser settings, or tap your name instead.':n==='NotFoundError'||(e&&e.message==='nocam')?'No camera was found on this device. Tap your name instead.':'The camera could not start. Tap your name instead.'}; U.kForce=true; renderKiosk(); kClose(7000) } }
+async function qrTick(){ if(!U.kiosk||!U.kq||U.kq.step!=='qr'){ qrStop(); return } const v=$('#kqv'); if(!v||QRS.busy||v.readyState<2||!v.videoWidth)return; QRS.busy=true;
+  try{ const sc=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight)); const w=Math.round(v.videoWidth*sc), h=Math.round(v.videoHeight*sc); const cv=QRS.cv||(QRS.cv=document.createElement('canvas')); cv.width=w; cv.height=h; const cx=cv.getContext('2d',{willReadFrequently:true}); cx.drawImage(v,0,0,w,h);
+    const r=jsQR(cx.getImageData(0,0,w,h).data,w,h,{inversionAttempts:'dontInvert'});
+    if(r&&r.data){ if(r.data===QRS.last&&Date.now()-QRS.lastAt<2500){ QRS.busy=false; return } QRS.last=r.data; QRS.lastAt=Date.now(); const c=await qrCheck(r.data);
+      if(!U.kq||U.kq.step!=='qr'){ QRS.busy=false; return }
+      if(c.p&&!c.err){ qrStop(); const p=c.p; if(!p.licensed){ U.kq={pid:p.id,step:'msg',msg:'No licence for '+p.name+'. Ask a manager.'}; U.kForce=true; renderKiosk(); kClose(4000) } else { U.kq={pid:p.id,step:'act',pin:'',qr:true}; U.kForce=true; renderKiosk(); kClose(30000) } }
+      else qrMsg(c.err==='old'?'That code has run out. Open Show my QR code again on your phone.':c.err==='other'?'That is not a Proview Team code.':'That code was not recognised. Ask a manager.',true) } }
+  catch(e){}
+  QRS.busy=false }
+A.kqr=()=>{ U.kq={step:'qr',msg:'Starting the camera…'}; U.kForce=true; renderKiosk(); kClose(45000); qrStart() };
+A.kQrFlip=()=>{ U.kCam=U.kCam==='environment'?'user':'environment'; U.kForce=true; renderKiosk(); kClose(45000); qrStart() };
+/* everyone needs a kiosk code for their QR to be signed with; an admin's device fills in any that are missing */
+function qrEnsureCodes(){ const m=me(); if(!m||!isAdmin(m))return; let ch=false; S.people.forEach(p=>{ if(!p.archived&&!p.code){ p.code=uid().slice(0,6).toUpperCase(); ch=true } }); if(ch)save() }
 
 /* ---- 96-header.js ---- */
 /* ===== Top-right header group, the same in every Proview app =====

@@ -79,8 +79,8 @@ V.live=()=>{ const list=team(); const ps=list.map(p=>{ const e=by(S.entries.filt
 const KFLAG='pv-team-kiosk';
 const kFlag=v=>{ try{ if(v===undefined)return localStorage.getItem(KFLAG)==='1'; if(v)localStorage.setItem(KFLAG,'1'); else localStorage.removeItem(KFLAG) }catch(e){} return false };
 const kMgrPins=()=>S.people.filter(p=>!p.archived&&isMgr(p)&&p.pin).map(p=>String(p.pin));
-function kGo(){ U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
-function kOut(){ U.kiosk=false; U.kq=null; kFlag(false); clearTimeout(kT); $('#kiosk-root').innerHTML=''; if(U.wasLogin){ U.login=true; U.wasLogin=false } if(U.login)renderLogin() }
+function kGo(){ if(typeof qrEnsureCodes==='function')qrEnsureCodes(); U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
+function kOut(){ if(typeof qrStop==='function')qrStop(); U.kiosk=false; U.kq=null; kFlag(false); clearTimeout(kT); $('#kiosk-root').innerHTML=''; if(U.wasLogin){ U.login=true; U.wasLogin=false } if(U.login)renderLogin() }
 A.kiosk=()=>{ const m=me(); if(!U.login&&m&&isMgr(m)&&!kMgrPins().length){ modal(`<h2>Choose your PIN first</h2><p class="mut">The kiosk locks this device so staff can only clock in and out. You will need your PIN to exit it. 3 to 6 numbers.</p><input id="kspin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="PIN" aria-label="Your PIN" data-enter="kSetPin"><div class="r"><button class="btn" data-a="mclose">Cancel</button><button class="btn pri" data-a="kSetPin">Save and open kiosk</button></div>`); return } kGo() };
 A.kSetPin=()=>{ const v=(($('#kspin')||{}).value||'').trim(); if(!/^\d{3,6}$/.test(v)){ toast('PIN must be 3 to 6 numbers'); return } me().pin=v; closeModal(); commit(); kGo() };
 A.kexit=()=>{ if(!kMgrPins().length){ kOut(); return } U.kq={step:'pin',exit:true,pin:''}; renderKiosk(); kClose(30000) };
@@ -90,9 +90,11 @@ A.kopen=d=>{ const p=P(d.id); if(!p.licensed){ U.kq={pid:p.id,step:'msg',msg:'No
 A.kpad=d=>{ const q=U.kq; if(!q)return; if(q.exit){ const pins=kMgrPins(); if(d.v==='x')q.pin=q.pin.slice(0,-1); else if(d.v==='c')q.pin=''; else q.pin+=d.v; q.err=''; if(pins.includes(q.pin)){ kOut(); return } if(q.pin.length>=Math.max(...pins.map(x=>x.length))){ q.err='Wrong PIN'; q.pin='' } renderKiosk(); kClose(30000); return } const p=P(q.pid); if(d.v==='x'){q.pin=q.pin.slice(0,-1)} else if(d.v==='c'){q.pin=''} else q.pin+=d.v; if(q.pin.length>=p.pin.length){ if(q.pin===p.pin){q.step='act';q.pin=''} else {q.err='Wrong PIN';q.pin=''} } else q.err=''; renderKiosk(); kClose(30000) };
 A.kact=d=>{ const q=U.kq; doClock(q.pid,d.k,{src:'kiosk'},ok=>{ if(!ok){kClose();return} const t=fT(nowMin()); q.step='msg'; q.msg={in:'Clocked in at '+t,out:'Clocked out at '+t,bstart:'Break started at '+t,bend:'Back from break at '+t}[d.k]; q.ok=true; renderKiosk(); kClose(2500) }) };
 A.kcancel=()=>kClose();
-A.kqr=()=>{ U.kq={step:'msg',msg:'QR clock-in needs the online version, where each phone scans a code. Tap your name here instead.'}; renderKiosk(); kClose(6000) };
 function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.innerHTML='';return}
+  const _kf=!!U.kForce;
   { const ae=document.activeElement; if(U.kq&&ae&&ae.closest&&ae.closest('#kiosk-root')&&/^(INPUT|TEXTAREA)$/.test(ae.tagName)&&ae.type!=='file'&&!U.kForce)return; U.kForce=false } /* someone is typing on the kiosk: do not redraw under them */
+  if(U.kq&&U.kq.step==='qr'&&$('#kqv')&&!_kf)return; /* the camera is showing: do not redraw it */
+  if((!U.kq||U.kq.step!=='qr')&&typeof qrStop==='function')qrStop();
   if(typeof kFixGate==='function')kFixGate(U.kq);
   if(U.kHold&&Date.now()-U.kHold<180000&&$('#kxb'))return; /* the camera is open: do not redraw, or the photo would be lost */
   const ppl=S.people.filter(p=>!p.archived&&!p.noTrack); const q=U.kq; let pop='';
@@ -101,9 +103,10 @@ function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.i
     else if(q.step==='act'){ const w=whoState(p); inner=`<div class="who" style="justify-content:center">${av(p,'lg')}</div><h2 style="text-align:center">Hi ${esc(p.name.split(' ')[0])}</h2><p style="text-align:center;margin:0">${stChipFull(w)}</p><div style="display:grid;gap:10px">${w.st==='out'?`<button class="btn pri lg" data-a="kact" data-k="in">${ic('play')}Clock in</button>`:w.st==='break'?`<button class="btn pri lg" data-a="kact" data-k="bend">${ic('coffee')}End break</button><button class="btn lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`:`<button class="btn lg" data-a="kact" data-k="bstart">${ic('coffee')}Start break</button><button class="btn pri lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`}${typeof kMoreBtns==='function'?kMoreBtns(p):''}</div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>` }
     else if(q.step==='fix'&&p)inner=kFixHtml(q);
     else if(q.step==='deliv'&&p)inner=kDelivHtml(q);
+    else if(q.step==='qr')inner=kQrHtml(q);
     else if(q.step==='tasks'&&p)inner=kTasksHtml(q);
     else if(q.step==='rota'&&p)inner=kRotaHtml(q);
     else inner=`<h2 style="text-align:center">${q.ok?'✓ ':''}${esc(q.msg||'')}</h2>`;
-    const wide=q.step==='tasks'||q.step==='rota'||q.step==='deliv'; pop=`<div class="mdl ${wide?'kx':''}" style="z-index:5"><div class="sheet ${wide?'kx-sheet':''}" style="background:#1a2036;color:#f2f4fa;${wide?'':'max-width:420px'}" role="dialog" aria-modal="true">${inner}</div></div>` }
+    const wide=q.step==='tasks'||q.step==='rota'||q.step==='deliv'||q.step==='qr'; pop=`<div class="mdl ${wide?'kx':''}" style="z-index:5"><div class="sheet ${wide?'kx-sheet':''}" style="background:#1a2036;color:#f2f4fa;${wide?'':'max-width:420px'}" role="dialog" aria-modal="true">${inner}</div></div>` }
   const _kb=$('#kxb'), _ks=_kb?_kb.scrollTop:0;
   r.innerHTML=`<div class="kiosk"><div class="kh"><span class="brandk">PROVIEW KIOSK · ${esc(S.org.name.toUpperCase())}</span><span class="sp"></span><button class="btn" data-a="kqr">${ic('qr')}Scan QR code</button><button class="btn" data-a="kexit">Exit kiosk</button></div><div class="ktime"><b data-live="clock" data-sec="1">${pad(new Date().getHours())}:${pad(new Date().getMinutes())}:${pad(new Date().getSeconds())}</b><span data-live="date">${fdl(today())}</span></div><p style="text-align:center;color:#aab2c8;margin:0">Tap your name to clock in or out, see today's checklist or the rota</p><div class="kg">${ppl.map(p=>{ const w=whoState(p); return `<button class="kt ${w.st==='in'?'in':w.st==='break'?'br':''}" data-a="kopen" data-id="${p.id}">${av(p)}<b>${esc(p.name)}</b><small>${w.st==='in'?'Clocked in '+fT(w.e.in):w.st==='break'?'On break':'Clocked out'}</small></button>`}).join('')}</div>${pop}</div>`; const _nb=$('#kxb'); if(_nb&&_ks)_nb.scrollTop=_ks }
