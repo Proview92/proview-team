@@ -15,8 +15,10 @@ async function qrCheck(txt){ const m=/^PVQ1\.([A-Za-z0-9_-]+)\.(\d+)\.([0-9a-f]{
   if(!p.code)return {err:'bad',p}; const w=+m[2]; if(Math.abs(qrWin()-w)>QR_SLACK)return {err:'old',p}; if(await qrSig(qrSecret(p),p.id+'.'+w)!==m[3])return {err:'bad',p}; return {p} }
 /* ---- my code, on the person's own phone ---- */
 function qrCard(){ const m=me(); if(!m||m.noTrack)return ''; return `<div class="card pad qr-card"><div class="tx"><b>My QR code</b><small>Hold it up to the tablet at work to clock in or out without typing a PIN.</small></div><button class="btn pri qr-btn" data-a="qrMine">${ic('qr')}Show my QR code</button></div>` }
-{ const _c=V.clock; V.clock=()=>qrCard()+_c() }
-{ const _h=V.home; V.home=()=>qrCard()+_h() }
+/* the card goes under the preview bar, not above it */
+const qrTop=h=>{ const c=qrCard(); if(!c)return h; const pb=(typeof previewBar==='function')?previewBar():''; return pb&&h.startsWith(pb)?pb+c+h.slice(pb.length):c+h };
+{ const _c=V.clock; V.clock=()=>qrTop(_c()) }
+{ const _h=V.home; V.home=()=>qrTop(_h()) }
 /* its own page too, from the menu: the code is on screen straight away */
 V.myqr=()=>{ const m=me(); if(!m||m.noTrack)return `<div class="card">${empty('No QR code for this login','This login does not clock in.')}</div>`; return `<div class="card pad qr-page"><h2>${esc(m.name)}</h2><p class="mut">Hold this up to the tablet's camera at work to clock in or out.</p><div id="qrbox" class="qrbox" aria-label="Your QR code"><p style="padding:30px;color:#333">Making your code…</p></div><p id="qrleft" class="mut" style="text-align:center;margin:8px 0 0"></p></div>` };
 AFTER.push(()=>{ if(U.page!=='myqr'||!$('#qrbox'))return; loadLib('vendor/qrgen.min.js',()=>typeof qrcode==='function').then(()=>{ clearInterval(qrT); qrT=setInterval(qrDraw,250); qrDraw() }).catch(()=>{ const b=$('#qrbox'); if(b)b.innerHTML='<p style="color:#b00020;padding:20px">Could not load the QR code. Check the internet connection and try again.</p>' }) });
