@@ -236,6 +236,7 @@ function render(){
   c.innerHTML=hubBar()+html; c.scrollTop=st;
   const bd=$('#bdrop'); if(bd)bd.style.display=(U.mo&&window.innerWidth<=860)?'block':'none';
   AFTER.forEach(f=>f());
+  if(!U.kiosk&&!U.login&&typeof kFlag==='function'&&kFlag()&&me())U.kiosk=true;
   if(U.kiosk)renderKiosk();
 }
 function renderLogin(){ if(typeof SYNC!=='undefined'&&SYNC.priv){ renderPrivLogin(); return } const r=$('#login-root'); r.innerHTML=`<div class="login"><div class="brand" style="color:var(--ink)"><span class="pvlogo" role="img" aria-label="Proview Team" style="width:44px;height:44px"></span><div><span class="pvword" style="color:var(--ink);font-size:17px;letter-spacing:.14em">PROVIEW<i>TEAM</i></span><small style="color:var(--mut);max-width:none">${esc(S.org.name)} · choose who is signed in</small></div></div><p class="mut" style="max-width:560px;text-align:center">There are no passwords in this browser version. Pick a person to see exactly what they see. Real sign-ins need the shared online version.</p><div class="lg2">${S.people.filter(p=>!p.archived).map(p=>`<button data-a="loginAs" data-id="${p.id}">${av(p)}<span class="who"><b>${esc(p.name)}</b><small>${roleName(p.role)}${p.id===S.people[0].id?' · owner':''}</small></span></button>`).join('')}</div><button class="btn" data-a="kiosk">${ic('kiosk')}Open kiosk instead</button></div>`; }
