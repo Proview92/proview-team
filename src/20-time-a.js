@@ -92,6 +92,7 @@ A.kact=d=>{ const q=U.kq; doClock(q.pid,d.k,{src:'kiosk'},ok=>{ if(!ok){kClose()
 A.kcancel=()=>kClose();
 A.kqr=()=>{ U.kq={step:'msg',msg:'QR clock-in needs the online version, where each phone scans a code. Tap your name here instead.'}; renderKiosk(); kClose(6000) };
 function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.innerHTML='';return}
+  if(U.kHold&&Date.now()-U.kHold<180000&&$('#kxb'))return; /* the camera is open: do not redraw, or the photo would be lost */
   const ppl=S.people.filter(p=>!p.archived&&!p.noTrack); const q=U.kq; let pop='';
   if(q){ const p=q.pid?P(q.pid):null; let inner='';
     if(q.step==='pin')inner=`<h2>${q.exit?'Manager PIN to exit the kiosk':'Hi '+esc(p.name.split(' ')[0])+', enter your PIN'}</h2><div class="pinp num" id="kpin" aria-live="polite">${'●'.repeat(q.pin.length)||'&nbsp;'}</div>${q.err?`<p style="color:#f68c82;text-align:center;margin:0">${q.err}</p>`:''}<div class="pad4">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-a="kpad" data-v="${n}">${n}</button>`).join('')}<button data-a="kpad" data-v="c" aria-label="Clear">C</button><button data-a="kpad" data-v="0">0</button><button data-a="kpad" data-v="x" aria-label="Delete">⌫</button></div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>`;

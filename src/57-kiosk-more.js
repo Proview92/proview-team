@@ -26,5 +26,5 @@ I.kPhoto=el=>{ const f=el.files&&el.files[0]; const q=U.kq; if(!f||el._busy||!q|
   tkPhShrink(f,(data,err)=>{ U.kHold=0; if(!data){ toast(err||'Could not add the photo.'); kClose(K_IDLE); return }
     S.tkPhotos.push({id:uid(),tid:t.id,d,by:pid,at:Date.now(),data}); commit(); if(U.kiosk&&U.kq&&U.kq.pid===pid){ renderKiosk(); kClose(K_IDLE) } toast('Photo added. Managers can see it now.') }) };
 /* keep the screen open while someone is using it or the camera is open; go back to the names when they stop */
-document.addEventListener('pointerdown',e=>{ if(!U.kiosk||!U.kq||!e.target.closest)return; if(e.target.closest('.kx-ph'))U.kHold=Date.now(); if((U.kq.step==='tasks'||U.kq.step==='rota')&&e.target.closest('#kiosk-root'))kClose(K_IDLE) },true);
+document.addEventListener('pointerdown',e=>{ if(!U.kiosk||!U.kq||!e.target.closest)return; U.kHold=e.target.closest('.kx-ph')?Date.now():0; if((U.kq.step==='tasks'||U.kq.step==='rota')&&e.target.closest('#kiosk-root'))kClose(K_IDLE) },true);
 document.addEventListener('scroll',e=>{ if(U.kiosk&&U.kq&&(U.kq.step==='tasks'||U.kq.step==='rota'))kClose(K_IDLE) },true);
