@@ -787,3 +787,7 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 @media(max-width:600px){ .kx-hd{flex-wrap:wrap} .kx-hd>div{flex:1 0 100%} #kiosk-root .kx-hd .btn{flex:1} .kx-row{flex-wrap:wrap} .kx-tx{flex:1 0 calc(100% - 80px)} #kiosk-root .kx-ph{flex:1;justify-content:center;min-height:52px} #kiosk-root .kx-sheet{padding:12px} .kx-wk b{min-width:0;font-size:16px} }
 #kiosk-root label.kx-ph{width:auto;justify-content:center;white-space:nowrap}
 #kiosk-root label.kx-ph span{flex:none}
+/* forgotten clock-outs */
+#kiosk-root .kfix{width:100%;height:76px;font-size:34px;font-weight:800;text-align:center;background:#141a2e;color:#fff;border:3px solid #9aa5c7;color-scheme:dark;-webkit-appearance:none;appearance:none}
+#kiosk-root .kfix:focus{border-color:#fff;outline:0}
+#kiosk-root .kfx-btns{display:grid;gap:10px} #kiosk-root .kfx-btns .btn{width:100%;justify-content:center;min-height:60px;white-space:normal}

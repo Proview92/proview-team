@@ -1,7 +1,7 @@
 /* ===== To resolve, Today's briefing, paper views of timesheets (owner request 10 Nov) ===== */
 function resolveItems(){ const m=me(), t=today(), ws0=wkStart(t); const ppl=team(); const ids=new Set(ppl.map(p=>p.id)); const apr=feat(m,'approvals'), mr=mgrRota();
   const o={clock:[],req:[],brk:[],wk:[],rej:[],open:[],draft:[],leave:0};
-  S.entries.filter(e=>ids.has(e.pid)&&e.src!=='hours'&&e.date<t&&e.st!=='approved'&&(e.out==null||(e.note||'').includes('Auto clock-out'))).sort((a,b)=>a.date<b.date?1:-1).forEach(e=>o.clock.push(e));
+  S.entries.filter(e=>ids.has(e.pid)&&e.src!=='hours'&&e.st!=='approved'&&((e.out==null&&e.date<t)||(e.out!=null&&e.date<=t&&(e.note||'').includes('Auto clock-out')))).sort((a,b)=>a.date<b.date?1:-1).forEach(e=>o.clock.push(e));
   if(mr){ const lp=new Set(lvPeople().map(p=>p.id)); avList().filter(a=>a.st==='pending'&&lp.has(a.pid)&&a.date>=t).sort((a,b)=>a.date<b.date?-1:1).forEach(a=>o.req.push(a)) }
   S.entries.filter(e=>ids.has(e.pid)&&e.bc&&e.bc.st==='pending'&&canEditFor(e.pid,'pending')).forEach(e=>o.brk.push(e));
   const seen=new Set(); S.entries.filter(e=>ids.has(e.pid)&&e.date<ws0).forEach(e=>{ const ws=wkStart(e.date), k=e.pid+ws; if(seen.has(k))return; seen.add(k); const p=P(e.pid); if(!p)return; const st=weekStatus(p,ws); if(st==='rejected')o.rej.push({p,ws}); else if(st==='pending'&&apr&&!wkIssues(p,ws).some(x=>x.hard))o.wk.push({p,ws}) });

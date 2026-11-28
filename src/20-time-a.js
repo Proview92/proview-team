@@ -92,11 +92,14 @@ A.kact=d=>{ const q=U.kq; doClock(q.pid,d.k,{src:'kiosk'},ok=>{ if(!ok){kClose()
 A.kcancel=()=>kClose();
 A.kqr=()=>{ U.kq={step:'msg',msg:'QR clock-in needs the online version, where each phone scans a code. Tap your name here instead.'}; renderKiosk(); kClose(6000) };
 function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.innerHTML='';return}
+  if(U.kq&&U.kq.step==='fix'&&document.activeElement&&document.activeElement.id==='kfix')return; /* someone is typing their finish time */
+  if(typeof kFixGate==='function')kFixGate(U.kq);
   if(U.kHold&&Date.now()-U.kHold<180000&&$('#kxb'))return; /* the camera is open: do not redraw, or the photo would be lost */
   const ppl=S.people.filter(p=>!p.archived&&!p.noTrack); const q=U.kq; let pop='';
   if(q){ const p=q.pid?P(q.pid):null; let inner='';
     if(q.step==='pin')inner=`<h2>${q.exit?'Manager PIN to exit the kiosk':'Hi '+esc(p.name.split(' ')[0])+', enter your PIN'}</h2><div class="pinp num" id="kpin" aria-live="polite">${'●'.repeat(q.pin.length)||'&nbsp;'}</div>${q.err?`<p style="color:#f68c82;text-align:center;margin:0">${q.err}</p>`:''}<div class="pad4">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-a="kpad" data-v="${n}">${n}</button>`).join('')}<button data-a="kpad" data-v="c" aria-label="Clear">C</button><button data-a="kpad" data-v="0">0</button><button data-a="kpad" data-v="x" aria-label="Delete">⌫</button></div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>`;
     else if(q.step==='act'){ const w=whoState(p); inner=`<div class="who" style="justify-content:center">${av(p,'lg')}</div><h2 style="text-align:center">Hi ${esc(p.name.split(' ')[0])}</h2><p style="text-align:center;margin:0">${stChipFull(w)}</p><div style="display:grid;gap:10px">${w.st==='out'?`<button class="btn pri lg" data-a="kact" data-k="in">${ic('play')}Clock in</button>`:w.st==='break'?`<button class="btn pri lg" data-a="kact" data-k="bend">${ic('coffee')}End break</button><button class="btn lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`:`<button class="btn lg" data-a="kact" data-k="bstart">${ic('coffee')}Start break</button><button class="btn pri lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`}${typeof kMoreBtns==='function'?kMoreBtns(p):''}</div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>` }
+    else if(q.step==='fix'&&p)inner=kFixHtml(q);
     else if(q.step==='tasks'&&p)inner=kTasksHtml(q);
     else if(q.step==='rota'&&p)inner=kRotaHtml(q);
     else inner=`<h2 style="text-align:center">${q.ok?'✓ ':''}${esc(q.msg||'')}</h2>`;
