@@ -904,3 +904,5 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 .sdm-t:has(input:checked) small.on{display:block;color:var(--pri)}.sdm-t:has(input:checked) small.off{display:none}
 .sdm-t:has(input:focus-visible){outline:2px solid var(--pri);outline-offset:2px}
 @media(max-width:480px){.sdm{grid-template-columns:1fr 1fr}.sdm-t{gap:8px;padding:8px}}
+
+.sdw{display:flex;align-items:center;gap:12px;margin-top:6px}.sdw-n{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:6px}.sdw-n .chip{font-size:15px;padding:6px 12px}.sdw .btn{min-height:46px;white-space:nowrap}
