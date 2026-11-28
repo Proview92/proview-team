@@ -872,3 +872,8 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 .mt-days button.on small{color:#fff;opacity:.9}
 .tk-steps.ok,.tk-cnt.ok{color:var(--ok,#128a4d);font-weight:700}
 .tk-cnt{font-size:14px;font-weight:600;color:var(--mut);margin-left:8px}
+
+/* switches for features that are not built yet */
+.tg-soon .tx b{color:var(--mut)}
+.tg-soon .sw2{opacity:.45;cursor:not-allowed}
+.tg-soon .sw2 input{cursor:not-allowed}

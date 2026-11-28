@@ -76,7 +76,7 @@ A.whoIn=()=>{ const list=whoPeople(); if(!list.length&&!isTop(me())){toast('Your
 /* ----- live locations ----- */
 V.live=()=>{ const list=team(); const ps=list.map(p=>{ const e=by(S.entries.filter(x=>x.pid===p.id&&x.lat!=null),x=>x.date+String(x.in).padStart(5,'0')).pop(); return {p,e,w:whoState(p)} });
   const items=ps.filter(x=>x.e&&x.e.date===today()).map(x=>({lat:x.e.lat,lng:x.e.lng,label:ini(x.p.name),color:x.w.st==='in'?'#12874a':x.w.st==='break'?'#b87400':'#6b7183'}));
-  return `<div class="bar">${scopeSeg()}</div><div class="alert ${S.tt.loc.live?'info':'warn'}" style="margin-bottom:12px">${ic('pin')}<span>${S.tt.loc.live?'Live location tracking is on.':'Live location tracking is off. Showing where each person last clocked in.'} Positions come from the phone's location at clock-in.</span></div>${schemMap(items,S.locations.filter(l=>!l.archived))}
+  return `<div class="bar">${scopeSeg()}</div><div class="alert info" style="margin-bottom:12px">${ic('pin')}<span>Showing where each person last clocked in. Positions come from the phone's location at clock-in. Live tracking is coming soon.</span></div>${schemMap(items,S.locations.filter(l=>!l.archived))}
   <div class="card" style="margin-top:12px"><div class="hd"><h2>Members</h2></div>${ps.map(({p,e,w})=>`<div class="nowc"><div class="who" style="flex:1">${av(p,'sm')}<div><b>${esc(p.name)}</b><small>${e?esc(lname(e.loc))+' · '+(e.date===today()?'today '+fT(e.in):fdate(e.date)):'No location yet'}</small></div></div>${stChip(w.st)}</div>`).join('')||empty('Nobody in this view')}</div>` };
 
 /* ----- kiosk ----- */
