@@ -863,3 +863,12 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 .qr-page{text-align:center;max-width:460px;margin:0 auto}
 .qr-page h2{margin:0 0 4px}
 @media(max-width:600px){ .qr-card .qr-btn{flex:1 0 100%;justify-content:center} }
+/* my tasks: one upcoming day at a time, step counts */
+.mt-days{display:flex;gap:8px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.mt-days button{flex:1 0 96px;min-height:58px;display:grid;gap:2px;padding:8px 10px;background:var(--card);border:1px solid var(--line);color:var(--ink);font:inherit;cursor:pointer;text-align:left}
+.mt-days button b{font-size:15px}
+.mt-days button small{font-size:12.5px;color:var(--mut)}
+.mt-days button.on{background:var(--main);border-color:var(--main);color:#fff}
+.mt-days button.on small{color:#fff;opacity:.9}
+.tk-steps.ok,.tk-cnt.ok{color:var(--ok,#128a4d);font-weight:700}
+.tk-cnt{font-size:14px;font-weight:600;color:var(--mut);margin-left:8px}
