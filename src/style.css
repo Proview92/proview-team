@@ -877,3 +877,7 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 .tg-soon .tx b{color:var(--mut)}
 .tg-soon .sw2{opacity:.45;cursor:not-allowed}
 .tg-soon .sw2 input{cursor:not-allowed}
+
+/* roles: quick add */
+.rq{margin-bottom:14px;padding:16px 18px}.rq h3{margin:0 0 4px}.rq-b{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.rq-b .btn{min-height:46px;font-size:16px;padding:0 16px}.rq-b .btn.rq-on{opacity:.6;cursor:default}
