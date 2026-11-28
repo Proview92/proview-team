@@ -79,8 +79,9 @@ function docsLite(d) {
 }
 function redactPerson(p, u) {
   if (isAdminU(u) || p.id === u.id) return p;
-  if (feat(u, 'people')) { if (!isAdminU(p) || !p.pin) return p; const q = { ...p }; delete q.pin; return q; }   // managers never see an owner's or admin's PIN
+  if (feat(u, 'people')) { if (!isAdminU(p) || !p.pin) return p; const q = { ...p }; q.pinLen = String(p.pin).length; delete q.pin; return q; }   // managers never see an owner's or admin's PIN
   const o = { ...p };
+  o.pinLen = p.pin ? String(p.pin).length : 0;   // digits in the hidden PIN, so a kiosk knows when to ask for a check
   PSTRIP.forEach(k => delete o[k]);
   if (u.role === 'manager' || feat(u, 'rota') || feat(u, 'timesheets')) o.docs = docsLite(p.docs); else delete o.docs;
   return o;

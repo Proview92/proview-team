@@ -19,6 +19,8 @@
 //   POST api/setpin    { id, pin } → { token, id }      (the owner's first PIN)
 //   POST api/logout
 //   POST api/handover  { id } → { token, id }            (trial shift on a manager's phone)
+//   POST api/kcheck    { id, pin } | { exit: true, pin } → { ok }   (kiosk: is this the person's PIN / may the kiosk be left)
+//   POST api/kqr       { txt } → { id } | { err }                 (kiosk: is this QR code genuine and fresh)
 //   GET  api/state     → { rev, state }
 //   POST api/ops       { base, ops, cond? } → { rev, missed, dropped }
 //   GET  api/changes?since=N → { rev, ops } | { rev, snapshot }
@@ -67,8 +69,10 @@ function docsLite(d: Any) {
 }
 function redactPerson(p: Any, u: Any) {
   if (isAdminU(u) || p.id === u.id) return p;
-  if (feat(u, "people")) { if (!isAdminU(p) || !p.pin) return p; const q = { ...p }; delete q.pin; return q; }
+  // pinLen: how many digits the hidden PIN has, so a kiosk knows when to ask the server to check it (POST api/kcheck)
+  if (feat(u, "people")) { if (!isAdminU(p) || !p.pin) return p; const q = { ...p }; q.pinLen = String(p.pin).length; delete q.pin; return q; }
   const o = { ...p };
+  o.pinLen = p.pin ? String(p.pin).length : 0;
   PSTRIP.forEach((k) => delete o[k]);
   if (u.role === "manager" || feat(u, "rota") || feat(u, "timesheets")) o.docs = docsLite(p.docs); else delete o.docs;
   return o;
@@ -313,6 +317,41 @@ Deno.serve(async (req) => {
       const t = findIn(state, "people", b.id);
       if (!feat(u, "people") || !t || !t.trial || t.archived) return send({ error: "no" }, 403);
       return send({ token: await newToken(db, site, t.id, user.id, 0.25), id: t.id });
+    }
+
+    // ----- kiosk checks: the tablet's login cannot see PINs or kiosk codes, so the server checks them -----
+    if (path === "api/kcheck" && req.method === "POST") {
+      if (!(isAdminU(u) || u.role === "manager") || !feat(u, "timesheets")) return send({ error: "no" }, 403);   // only a manager-level login runs a kiosk
+      const b = await body();
+      const pin = String(b.pin || "");
+      const exit = !!b.exit;
+      const p = exit ? null : findIn(state, "people", b.id);
+      if (!exit && (!p || p.archived)) return send({ error: "person" }, 404);
+      const k1 = site + "|k|" + u.id + "|" + (exit ? "exit" : p.id), k2 = site + "|kid|" + (exit ? "exit" : p.id);
+      const bl = await Promise.all([db.rpc("pt_pin_blocked", { p_key: k1, p_max: 8 }), db.rpc("pt_pin_blocked", { p_key: k2, p_max: 25 })]);
+      if (bl[0].data || bl[1].data) return send({ error: "wait" }, 429);
+      // leaving the kiosk: any manager's, admin's or owner's PIN, or the PIN of the login the kiosk runs under
+      const ok = !!pin && (exit
+        ? (state.people || []).some((x: Any) => x && !x.archived && x.pin && (isAdminU(x) || x.role === "manager" || x.id === u.id) && String(x.pin) === pin)
+        : (!!p.pin && String(p.pin) === pin));
+      if (!ok) { await db.rpc("pt_pin_failed", { p_key: k1 }); await db.rpc("pt_pin_failed", { p_key: k2 }); }
+      return send({ ok });
+    }
+    if (path === "api/kqr" && req.method === "POST") {
+      if (!(isAdminU(u) || u.role === "manager") || !feat(u, "timesheets")) return send({ error: "no" }, 403);   // only a manager-level login runs a kiosk
+      const b = await body();
+      const m = /^PVQ1\.([A-Za-z0-9_-]+)\.(\d+)\.([0-9a-f]{12})$/.exec(String(b.txt || "").trim());
+      if (!m) return send({ err: "other" });
+      const p = findIn(state, "people", m[1]);
+      if (!p || p.archived) return send({ err: "who" });
+      if (!p.code) return send({ err: "bad", id: p.id });   // no kiosk code on the profile: nothing to sign with
+      const w = Number(m[2]);
+      if (Math.abs(Math.floor(Date.now() / 2000) - w) > 5) return send({ err: "old", id: p.id });
+      const enc = new TextEncoder();
+      const key = await crypto.subtle.importKey("raw", enc.encode("pvq1|" + String(p.code || "") + "|" + p.id), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+      const sig = hex(await crypto.subtle.sign("HMAC", key, enc.encode(p.id + "." + w))).slice(0, 12);
+      if (sig !== m[3]) return send({ err: "bad", id: p.id });
+      return send({ id: p.id });
     }
 
     if (path === "api/state" && req.method === "GET") return send({ rev, state: viewState(state, u) });

@@ -1120,6 +1120,8 @@ const navOn=n=>{ if(n.hub){ const h=hubOf(U.page); return !!h&&h.id===n.hub } re
 function hubBar(){ const h=hubOf(U.page); if(!h)return ''; const pg=hubPages(h); if(pg.length<2)return ''; return `<div class="tabs hubtabs" role="tablist">${pg.map(([k,l])=>`<button role="tab" aria-selected="${U.page===k}" class="${U.page===k?'on':''}" data-a="go" data-k="${k}">${esc(l)}</button>`).join('')}</div>` }
 const NAVS=[{k:'home',l:'Home',i:'home'},{k:'clock',l:'Time clock',i:'clock'},{k:'mytasks',l:'Tasks',i:'tasks'},{k:'mysheet',l:'Timesheets',i:'doc'}];
 const TITLES={myqr:'My QR code',resolve:'To resolve',locations:'Locations',start:'Get started',dash:'Dashboard',timesheets:'Timesheets',rota:'Rota',tasks:'Tasks',live:'Live locations',timeoff:'Time off',reports:'Reports',ai:'Proview AI','s-people':'People','s-users':'Users','s-payslips':'Payslips and P45s','s-tracking':'Time tracking','s-schedules':'Schedules','s-holidays':'Holidays','s-locations':'Locations','s-projects':'Roles','s-company':'Company',home:'Home',clock:'Time clock',mytasks:'Tasks',mysheet:'Timesheets',mypay:'Payslips and P45s',inbox:'Inbox',notifs:'Notifications'};
+/* the kiosk is for the shared tablet: only an owner, admin or manager login may open it (28 Nov 2026) */
+function kioskMay(){ const m=me(); if(typeof SYNC==='undefined'||!SYNC.priv)return true; return !!m&&isMgr(m)&&feat(m,'timesheets') }
 function menuFor(m){
   if(isTop(m)){ const out=[]; let grp=null; NAV.forEach(n=>{ if(n.g){grp={g:n.g,c:n.c,items:[]};out.push(grp)} else if(n.k!=='resolve'&&canPage(n.k)){ if(!grp){grp={g:'',items:[]};out.push(grp)} grp.items.push(n)} }); out.forEach(g=>g.items=mergeHubs(g.items)); return out.filter(g=>g.items.length) }
   const items=NAVS.slice(); const g=[{g:'',items}];
@@ -1140,7 +1142,7 @@ function sideHtml(){ const m=me(); const menu=menuFor(m); const col=S.ui.col&&wi
   { const m=me(), inb=inboxItems().length; h+=`<div class="ng ph-only"><span>Tools</span></div><button class="nv ph-only" data-a="search" title="Search">${ic('search')}<span class="lbl">Search</span></button><button class="nv ph-only ${U.page==='inbox'?'on':''}" data-a="go" data-k="inbox" title="Inbox">${ic('inbox')}<span class="lbl">Inbox</span>${inb?`<span class="bdg">${inb}</span>`:''}</button>`; if(canSecret(m)&&secOn())h+=`<button class="nv ph-only" data-a="secTog" title="${payHidden()?'Show pay and PINs':'Hide pay and PINs'}">${ic(payHidden()?'eye':'eyeoff')}<span class="lbl">${payHidden()?'Show pay and PINs':'Hide pay and PINs'}</span></button>` }
   h+=`<div class="sp"></div>`;
   h+=`<button class="nv nvb" data-a="whoIn" title="Who's in/out">${ic('users')}<span class="lbl">Who's in/out</span></button>`;
-  if(typeof SYNC==='undefined'||!SYNC.priv||feat(me(),'timesheets'))h+=`<button class="nv nvb" data-a="kiosk" title="Open kiosk">${ic('kiosk')}<span class="lbl">Open kiosk</span></button>`;
+  if(kioskMay())h+=`<button class="nv nvb" data-a="kiosk" title="Open kiosk">${ic('kiosk')}<span class="lbl">Open kiosk</span></button>`;
   h+=`<div class="nvrow"><button class="nv nvb" data-a="navPos" title="Menu at the bottom" aria-label="Menu at the bottom">${ic('menu')}</button><button class="nv nvb" data-a="dense" title="Compact view: ${denseOn()?'on':'off'}" aria-label="Compact view">${ic('list')}</button><button class="nv nvb" data-a="theme" title="${isDark()?'Light mode':'Dark mode'}" aria-label="${isDark()?'Light mode':'Dark mode'}">${ic(isDark()?'sun':'moon')}</button><button class="nv nvb" data-a="signout" title="Sign out" aria-label="Sign out">${ic('out')}</button><button class="nv nvb colbtn" data-a="col" title="Collapse menu" aria-label="Collapse menu">${ic('coll')}</button></div>`; return h }
 function topHtml(){ const m=me(); const unread=S.notifs.filter(n=>!n.read&&(!n.to||n.to===m.id)).length; const inb=inboxItems().length;
   let h=`<button class="ib mnu" data-a="menu" aria-label="Menu">${ic('menu')}</button><h1>${esc(TITLES[U.page]||'')}</h1>`;
@@ -1187,7 +1189,7 @@ function render(){
   c.innerHTML=hubBar()+html; c.scrollTop=st;
   const bd=$('#bdrop'); if(bd)bd.style.display=(U.mo&&window.innerWidth<=860)?'block':'none';
   AFTER.forEach(f=>f());
-  if(!U.kiosk&&!U.login&&typeof kFlag==='function'&&kFlag()&&me())U.kiosk=true;
+  if(!U.kiosk&&!U.login&&typeof kFlag==='function'&&kFlag()&&me()){ if(kioskMay())U.kiosk=true; else kFlag(false) }
   if(U.kiosk)renderKiosk();
 }
 function renderLogin(){ if(typeof SYNC!=='undefined'&&SYNC.priv){ renderPrivLogin(); return } const r=$('#login-root'); r.innerHTML=`<div class="login"><div class="brand" style="color:var(--ink)"><span class="pvlogo" role="img" aria-label="Proview Team" style="width:44px;height:44px"></span><div><span class="pvword" style="color:var(--ink);font-size:17px;letter-spacing:.14em">PROVIEW<i>TEAM</i></span><small style="color:var(--mut);max-width:none">${esc(S.org.name)} · choose who is signed in</small></div></div><p class="mut" style="max-width:560px;text-align:center">There are no passwords in this browser version. Pick a person to see exactly what they see. Real sign-ins need the shared online version.</p><div class="lg2">${S.people.filter(p=>!p.archived).map(p=>`<button data-a="loginAs" data-id="${p.id}">${av(p)}<span class="who"><b>${esc(p.name)}</b><small>${roleName(p.role)}${p.id===S.people[0].id?' · owner':''}</small></span></button>`).join('')}</div><button class="btn" data-a="kiosk">${ic('kiosk')}Open kiosk instead</button></div>`; }
@@ -1915,13 +1917,29 @@ const kOpener=()=>{ try{ return localStorage.getItem(KFLAG+'-by')||'' }catch(e){
 const kMgrPins=()=>uniq(S.people.filter(p=>!p.archived&&p.pin&&(isMgr(p)||p.id===kOpener())).map(p=>String(p.pin)));
 function kGo(){ if(typeof qrEnsureCodes==='function')qrEnsureCodes(); try{ if(!U.login&&me())localStorage.setItem(KFLAG+'-by',me().id); else localStorage.removeItem(KFLAG+'-by') }catch(e){} U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
 function kOut(){ if(typeof qrStop==='function')qrStop(); U.kiosk=false; U.kq=null; kFlag(false); clearTimeout(kT); $('#kiosk-root').innerHTML=''; if(U.wasLogin){ U.login=true; U.wasLogin=false } if(U.login)renderLogin() }
-A.kiosk=()=>{ const m=me(); if(!U.login&&m&&!m.pin&&!S.people.some(p=>!p.archived&&isMgr(p)&&p.pin)){ modal(`<h2>Choose your PIN first</h2><p class="mut">The kiosk locks this device so staff can only clock in and out. You will need your PIN to exit it. 3 to 6 numbers.</p><input id="kspin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="PIN" aria-label="Your PIN" data-enter="kSetPin"><div class="r"><button class="btn" data-a="mclose">Cancel</button><button class="btn pri" data-a="kSetPin">Save and open kiosk</button></div>`); return } kGo() };
-A.kSetPin=()=>{ const v=(($('#kspin')||{}).value||'').trim(); if(!/^\d{3,6}$/.test(v)){ toast('PIN must be 3 to 6 numbers'); return } me().pin=v; closeModal(); commit(); kGo() };
-A.kexit=()=>{ if(!kMgrPins().length){ kOut(); return } U.kq={step:'pin',exit:true,pin:''}; renderKiosk(); kClose(30000) };
+const kCloud=()=>typeof SYNC!=='undefined'&&SYNC.on&&SYNC.priv;
+/* with Geofencing on (and a location pinned on the map), the kiosk only opens on site */
+function kSiteCheck(go){ const ls=S.locations.filter(l=>!l.archived&&l.lat!=null); if(!S.tt.loc.geo||!ls.length){ go(); return } toast('Checking that this device is on site…');
+  getPos((pos,err)=>{ if(!pos){ toast((err||'Location is not available.')+' The kiosk only opens on site.'); return } const best=ls.map(l=>({l,d:dist(pos.lat,pos.lng,l.lat,l.lng)})).sort((a,b)=>a.d-b.d)[0]; if(best.d>best.l.radius){ toast('This device is '+Math.round(best.d)+' m from '+best.l.name+'. The kiosk only opens within '+best.l.radius+' m.'); return } go() }) }
+A.kiosk=()=>{ const m=me(); if(!U.login&&!kioskMay()){ toast('The kiosk can only be opened from a manager login on the shared tablet.'); return }
+  if(!U.login&&m&&!m.pin&&!S.people.some(p=>!p.archived&&isMgr(p)&&(p.pin||p.pinLen))){ modal(`<h2>Choose your PIN first</h2><p class="mut">The kiosk locks this device so staff can only clock in and out. You will need your PIN to exit it. 3 to 6 numbers.</p><input id="kspin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="PIN" aria-label="Your PIN" data-enter="kSetPin"><div class="r"><button class="btn" data-a="mclose">Cancel</button><button class="btn pri" data-a="kSetPin">Save and open kiosk</button></div>`); return } kSiteCheck(kGo) };
+A.kSetPin=()=>{ const v=(($('#kspin')||{}).value||'').trim(); if(!/^\d{3,6}$/.test(v)){ toast('PIN must be 3 to 6 numbers'); return } me().pin=v; closeModal(); commit(); kSiteCheck(kGo) };
+const kHidLens=()=>kCloud()?uniq(S.people.filter(p=>!p.archived&&isMgr(p)&&!p.pin&&p.pinLen).map(p=>p.pinLen)):[];
+A.kexit=()=>{ if(!kMgrPins().length&&!kHidLens().length){ kOut(); return } U.kq={step:'pin',exit:true,pin:''}; renderKiosk(); kClose(30000) };
 let kT=null;
 function kClose(delay){ clearTimeout(kT); if(delay){kT=setTimeout(()=>{ if(U.kHold&&Date.now()-U.kHold<180000){ kClose(30000); return } U.kHold=0; U.kq=null;renderKiosk()},delay)} else {U.kHold=0;U.kq=null;renderKiosk()} }
-A.kopen=d=>{ const p=P(d.id); if(!p.licensed){ U.kq={pid:p.id,step:'msg',msg:'No licence for '+p.name+'. Ask a manager.'}; renderKiosk(); kClose(4000); return } U.kq={pid:p.id,step:(S.tt.kpin&&p.pin)?'pin':'act',pin:''}; renderKiosk(); kClose(30000) };
-A.kpad=d=>{ const q=U.kq; if(!q)return; if(q.exit){ const pins=kMgrPins(); if(d.v==='x')q.pin=q.pin.slice(0,-1); else if(d.v==='c')q.pin=''; else q.pin+=d.v; q.err=''; if(pins.includes(q.pin)){ kOut(); return } if(q.pin.length>=Math.max(...pins.map(x=>x.length))){ q.err='Wrong PIN'; q.pin='' } renderKiosk(); kClose(30000); return } const p=P(q.pid); if(d.v==='x'){q.pin=q.pin.slice(0,-1)} else if(d.v==='c'){q.pin=''} else q.pin+=d.v; if(q.pin.length>=p.pin.length){ if(q.pin===p.pin){q.step='act';q.pin=''} else {q.err='Wrong PIN';q.pin=''} } else q.err=''; renderKiosk(); kClose(30000) };
+A.kopen=d=>{ const p=P(d.id); if(!p.licensed){ U.kq={pid:p.id,step:'msg',msg:'No licence for '+p.name+'. Ask a manager.'}; renderKiosk(); kClose(4000); return } U.kq={pid:p.id,step:(S.tt.kpin&&(p.pin||(kCloud()&&p.pinLen)))?'pin':'act',pin:''}; renderKiosk(); kClose(30000) };
+A.kpad=d=>{ const q=U.kq; if(!q)return; if(q.busy)return;
+  if(q.exit){ const pins=kMgrPins(), hid=kHidLens(); if(d.v==='x')q.pin=q.pin.slice(0,-1); else if(d.v==='c')q.pin=''; else q.pin+=d.v; q.err=''; if(pins.includes(q.pin)){ kOut(); return }
+    const mx=Math.max(0,...pins.map(x=>x.length),...hid); const wrong=()=>{ if(q.pin.length>=mx){ q.err='Wrong PIN'; q.pin='' } renderKiosk(); kClose(30000) };
+    if(hid.includes(q.pin.length)){ const tryPin=q.pin; q.busy=true; renderKiosk(); syncPost('api/kcheck',{exit:true,pin:tryPin}).then(r=>{ if(U.kq!==q)return; q.busy=false; if(r.s===200&&r.j.ok){ kOut(); return } if(r.s===429){ q.err='Too many wrong tries. Wait a few minutes.'; q.pin=''; renderKiosk(); kClose(30000); return } if(r.s!==200){ q.err='Could not check the PIN. Check the internet connection.'; q.pin=''; renderKiosk(); kClose(30000); return } wrong() }); return }
+    wrong(); return } const p=P(q.pid); if(d.v==='x'){q.pin=q.pin.slice(0,-1)} else if(d.v==='c'){q.pin=''} else q.pin+=d.v;
+  if(p.pin){ if(q.pin.length>=String(p.pin).length){ if(q.pin===String(p.pin)){q.step='act';q.pin=''} else {q.err='Wrong PIN';q.pin=''} } else q.err=''; renderKiosk(); kClose(30000); return }
+  /* this login cannot see the PIN (the shared tablet's login): the server checks it */
+  q.err=''; if(q.pin.length>=(p.pinLen||0)){ const tryPin=q.pin; q.busy=true; renderKiosk(); syncPost('api/kcheck',{id:p.id,pin:tryPin}).then(r=>{ if(U.kq!==q)return; q.busy=false; q.pin='';
+      if(r.s===200&&r.j.ok)q.step='act'; else q.err=r.s===429?'Too many wrong tries. Wait a few minutes or ask a manager.':r.s===200?'Wrong PIN':'Could not check the PIN. Check the internet connection.';
+      renderKiosk(); kClose(30000) }); return }
+  renderKiosk(); kClose(30000) };
 A.kact=d=>{ const q=U.kq; doClock(q.pid,d.k,{src:'kiosk'},ok=>{ if(!ok){kClose();return} const t=fT(nowMin()); q.step='msg'; q.msg={in:'Clocked in at '+t,out:'Clocked out at '+t,bstart:'Break started at '+t,bend:'Back from break at '+t}[d.k]; q.ok=true; renderKiosk(); kClose(2500) }) };
 A.kcancel=()=>kClose();
 function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.innerHTML='';return}
@@ -1933,7 +1951,7 @@ function renderKiosk(){ const r=$('#kiosk-root'); if(!r)return; if(!U.kiosk){r.i
   if(U.kHold&&Date.now()-U.kHold<180000&&$('#kxb'))return; /* the camera is open: do not redraw, or the photo would be lost */
   const ppl=S.people.filter(p=>!p.archived&&!p.noTrack); const q=U.kq; let pop='';
   if(q){ const p=q.pid?P(q.pid):null; let inner='';
-    if(q.step==='pin')inner=`<h2>${q.exit?'Manager PIN to exit the kiosk':'Hi '+esc(p.name.split(' ')[0])+', enter your PIN'}</h2><div class="pinp num" id="kpin" aria-live="polite">${'●'.repeat(q.pin.length)||'&nbsp;'}</div>${q.err?`<p style="color:#f68c82;text-align:center;margin:0">${q.err}</p>`:''}<div class="pad4">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-a="kpad" data-v="${n}">${n}</button>`).join('')}<button data-a="kpad" data-v="c" aria-label="Clear">C</button><button data-a="kpad" data-v="0">0</button><button data-a="kpad" data-v="x" aria-label="Delete">⌫</button></div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>`;
+    if(q.step==='pin')inner=`<h2>${q.exit?'Manager PIN to exit the kiosk':'Hi '+esc(p.name.split(' ')[0])+', enter your PIN'}</h2><div class="pinp num" id="kpin" aria-live="polite">${q.busy?'Checking…':'●'.repeat(q.pin.length)||'&nbsp;'}</div>${q.err?`<p style="color:#f68c82;text-align:center;margin:0">${q.err}</p>`:''}<div class="pad4">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-a="kpad" data-v="${n}">${n}</button>`).join('')}<button data-a="kpad" data-v="c" aria-label="Clear">C</button><button data-a="kpad" data-v="0">0</button><button data-a="kpad" data-v="x" aria-label="Delete">⌫</button></div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>`;
     else if(q.step==='act'){ const w=whoState(p); inner=`<div class="who" style="justify-content:center">${av(p,'lg')}</div><h2 style="text-align:center">Hi ${esc(p.name.split(' ')[0])}</h2><p style="text-align:center;margin:0">${stChipFull(w)}</p><div style="display:grid;gap:10px">${w.st==='out'?`<button class="btn pri lg" data-a="kact" data-k="in">${ic('play')}Clock in</button>`:w.st==='break'?`<button class="btn pri lg" data-a="kact" data-k="bend">${ic('coffee')}End break</button><button class="btn lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`:`<button class="btn lg" data-a="kact" data-k="bstart">${ic('coffee')}Start break</button><button class="btn pri lg" data-a="kact" data-k="out">${ic('stop')}Clock out</button>`}${typeof kMoreBtns==='function'?kMoreBtns(p):''}</div><div class="r"><button class="btn" data-a="kcancel">Cancel</button></div>` }
     else if(q.step==='fix'&&p)inner=kFixHtml(q);
     else if(q.step==='deliv'&&p)inner=kDelivHtml(q);
@@ -3772,7 +3790,10 @@ async function qrSig(secret,msg){ const enc=new TextEncoder(); const key=await c
 const qrWin=()=>Math.floor(Date.now()/1000/QR_STEP);
 const qrSecret=p=>String(p.code||'')+'|'+p.id;
 async function qrMake(p){ const w=qrWin(); return 'PVQ1.'+p.id+'.'+w+'.'+await qrSig(qrSecret(p),p.id+'.'+w) }
-async function qrCheck(txt){ const m=/^PVQ1\.([A-Za-z0-9_-]+)\.(\d+)\.([0-9a-f]{12})$/.exec(String(txt||'').trim()); if(!m)return {err:'other'}; const p=P(m[1]); if(!p||p.archived)return {err:'who'}; const w=+m[2]; if(Math.abs(qrWin()-w)>QR_SLACK)return {err:'old',p}; if(await qrSig(qrSecret(p),p.id+'.'+w)!==m[3])return {err:'bad',p}; return {p} }
+async function qrCheck(txt){ const m=/^PVQ1\.([A-Za-z0-9_-]+)\.(\d+)\.([0-9a-f]{12})$/.exec(String(txt||'').trim()); if(!m)return {err:'other'}; const p=P(m[1]); if(!p||p.archived)return {err:'who'};
+  /* the shared tablet's login cannot see kiosk codes, so the server checks the code (and uses its own clock) */
+  if(!p.code&&typeof kCloud==='function'&&kCloud()){ const r=await syncPost('api/kqr',{txt:String(txt).trim()}); if(r.s!==200)return {err:'net',p}; if(r.j.err||!r.j.id)return {err:r.j.err||'bad',p}; return {p:P(r.j.id)||p} }
+  if(!p.code)return {err:'bad',p}; const w=+m[2]; if(Math.abs(qrWin()-w)>QR_SLACK)return {err:'old',p}; if(await qrSig(qrSecret(p),p.id+'.'+w)!==m[3])return {err:'bad',p}; return {p} }
 /* ---- my code, on the person's own phone ---- */
 function qrCard(){ const m=me(); if(!m||m.noTrack)return ''; return `<div class="card pad qr-card"><div class="tx"><b>My QR code</b><small>Hold it up to the tablet at work to clock in or out without typing a PIN.</small></div><button class="btn pri qr-btn" data-a="qrMine">${ic('qr')}Show my QR code</button></div>` }
 { const _c=V.clock; V.clock=()=>qrCard()+_c() }
@@ -3783,7 +3804,7 @@ AFTER.push(()=>{ if(U.page!=='myqr'||!$('#qrbox'))return; loadLib('vendor/qrgen.
 let qrT=null;
 async function qrDraw(){ const box=$('#qrbox'); if(!box){ clearInterval(qrT); qrT=null; return } const m=me(); const w=qrWin(); const c=$('#qrleft'); if(c&&!c.textContent)c.textContent='The code changes every '+QR_STEP+' seconds';
   if(box.dataset.w===String(w))return; box.dataset.w=String(w);
-  try{ const txt=await qrMake(m); const q=qrcode(0,'M'); q.addData(txt); q.make(); box.innerHTML=q.createSvgTag({cellSize:8,margin:4,scalable:true}) }catch(e){ box.innerHTML='<p style="color:#b00020;padding:20px">Could not make the code on this device.</p>' } }
+  try{ if(!m.code){ box.innerHTML='<p style="color:#b00020;padding:24px;font-size:17px">Your profile has no kiosk code yet. Ask a manager to open your profile in People and save it, then try again.</p>'; return } const txt=await qrMake(m); const q=qrcode(0,'M'); q.addData(txt); q.make(); box.innerHTML=q.createSvgTag({cellSize:8,margin:4,scalable:true}) }catch(e){ box.innerHTML='<p style="color:#b00020;padding:20px">Could not make the code on this device.</p>' } }
 A.qrMine=async()=>{ const m=me(); if(!m)return; modal(`<h2>${esc(m.name)}</h2><p class="mut" style="margin:0 0 10px">Hold this up to the tablet's camera.</p><div id="qrbox" class="qrbox" aria-label="Your QR code"><p style="padding:30px;color:#333">Making your code…</p></div><p id="qrleft" class="mut" style="text-align:center;margin:8px 0 0;font-variant-numeric:tabular-nums"></p><div class="r"><button class="btn pri" data-a="mclose">Close</button></div>`);
   try{ await loadLib('vendor/qrgen.min.js',()=>typeof qrcode==='function') }catch(e){ const b=$('#qrbox'); if(b)b.innerHTML='<p style="color:#b00020;padding:20px">Could not load the QR code. Check the internet connection and try again.</p>'; return }
   clearInterval(qrT); qrT=setInterval(qrDraw,250); qrDraw() };
@@ -3805,7 +3826,7 @@ async function qrTick(){ if(!U.kiosk||!U.kq||U.kq.step!=='qr'){ qrStop(); return
     if(r&&r.data){ if(r.data===QRS.last&&Date.now()-QRS.lastAt<2500){ QRS.busy=false; return } QRS.last=r.data; QRS.lastAt=Date.now(); const c=await qrCheck(r.data);
       if(!U.kq||U.kq.step!=='qr'){ QRS.busy=false; return }
       if(c.p&&!c.err){ qrStop(); const p=c.p; if(!p.licensed){ U.kq={pid:p.id,step:'msg',msg:'No licence for '+p.name+'. Ask a manager.'}; U.kForce=true; renderKiosk(); kClose(4000) } else { U.kq={pid:p.id,step:'act',pin:'',qr:true}; U.kForce=true; renderKiosk(); kClose(30000) } }
-      else qrMsg(c.err==='old'?'That code has run out. Hold the live code on your phone up to the camera, not a photo of it.':c.err==='other'?'That is not a Proview Team code.':'That code was not recognised. Ask a manager.',true) } }
+      else qrMsg(c.err==='net'?'Could not check the code. Check the internet connection.':c.err==='old'?'That code has run out. Hold the live code on your phone up to the camera, not a photo of it.':c.err==='other'?'That is not a Proview Team code.':'That code was not recognised. Ask a manager.',true) } }
   catch(e){}
   QRS.busy=false }
 A.kqr=()=>{ U.kq={step:'qr',msg:'Starting the camera…'}; U.kForce=true; renderKiosk(); kClose(45000); qrStart() };
@@ -3857,7 +3878,7 @@ A.acct=(d,el,e)=>{ if(e)e.stopPropagation(); const m=me(), c=hdrCL(), items=[];
   if(isAdmin(m)||feat(m,'people'))items.push({label:'Users & access',icon:'users',run:()=>go('s-users')});
   if(c&&(c.who.sites||[]).length>1)items.push({label:'Switch business',icon:'build',run:()=>A.cloudSwitch()});
   items.push({label:isDark()?'Light mode':'Dark mode',icon:isDark()?'sun':'moon',run:()=>A.theme()});
-  if((()=>{ try{ return !SYNC.priv }catch(e){ return true } })()||feat(m,'timesheets'))items.push({label:'Open kiosk',icon:'kiosk',run:()=>A.kiosk()});
+  if(kioskMay())items.push({label:'Open kiosk',icon:'kiosk',run:()=>A.kiosk()});
   items.push({label:hdrSignedIn()?'Sign out':'Sign out / switch person',icon:'logout',run:()=>A.signout(),sep:true});
   const email=c?c.who.email:(m.email||'');
   pvAccountMenu(el,{initials:ini(m.name),name:m.name,email:email?(hdrSignedIn()?'Signed in as '+email:email):'',sub:roleName(m.role)+(S.org&&S.org.name?' · '+S.org.name:''),focusFirst:!!e&&e.detail===0,items}) };

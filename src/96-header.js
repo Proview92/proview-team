@@ -41,7 +41,7 @@ A.acct=(d,el,e)=>{ if(e)e.stopPropagation(); const m=me(), c=hdrCL(), items=[];
   if(isAdmin(m)||feat(m,'people'))items.push({label:'Users & access',icon:'users',run:()=>go('s-users')});
   if(c&&(c.who.sites||[]).length>1)items.push({label:'Switch business',icon:'build',run:()=>A.cloudSwitch()});
   items.push({label:isDark()?'Light mode':'Dark mode',icon:isDark()?'sun':'moon',run:()=>A.theme()});
-  if((()=>{ try{ return !SYNC.priv }catch(e){ return true } })()||feat(m,'timesheets'))items.push({label:'Open kiosk',icon:'kiosk',run:()=>A.kiosk()});
+  if(kioskMay())items.push({label:'Open kiosk',icon:'kiosk',run:()=>A.kiosk()});
   items.push({label:hdrSignedIn()?'Sign out':'Sign out / switch person',icon:'logout',run:()=>A.signout(),sep:true});
   const email=c?c.who.email:(m.email||'');
   pvAccountMenu(el,{initials:ini(m.name),name:m.name,email:email?(hdrSignedIn()?'Signed in as '+email:email):'',sub:roleName(m.role)+(S.org&&S.org.name?' · '+S.org.name:''),focusFirst:!!e&&e.detail===0,items}) };
