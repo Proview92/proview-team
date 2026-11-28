@@ -736,3 +736,9 @@ html,body{touch-action:pan-x pan-y}
 @media(max-width:860px){ .pf-hint{display:none} }
 .ag-s{display:none}
 @media(max-width:600px){ .ag-l{display:none} .ag-s{display:inline} .pnl .pf:has(.pf-again){flex-wrap:nowrap} .pnl .pf:has(.pf-again) .btn{padding-left:12px;padding-right:12px;white-space:nowrap} .pnl .pf:has(.pf-again) .sp{display:none} }
+/* kiosk number pad: always readable (was white on white in the light theme) */
+#kiosk-root .pad4{grid-template-columns:repeat(3,88px);gap:12px}
+#kiosk-root .pad4 button{height:72px;font-size:30px;background:#232b47;border:2px solid #3a4569;color:#fff}
+#kiosk-root .pad4 button:active{background:var(--main)}
+#kiosk-root .pinp{color:#fff}
+@media(max-width:360px){ #kiosk-root .pad4{grid-template-columns:repeat(3,72px);gap:10px} #kiosk-root .pad4 button{height:64px} }
