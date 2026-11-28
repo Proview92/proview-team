@@ -10,5 +10,9 @@ out=open(d+'00-head.html').read()+open(d+'style.css').read()+shell+open(d+'01-bo
 for f in sorted(glob.glob(d+'[0-9][0-9]-*.js')):
     out+='\n/* ---- '+os.path.basename(f)+' ---- */\n'+open(f).read()
 out+='\n</script>\n</body>\n</html>\n'
+import hashlib
+ver=hashlib.sha1(out.encode()).hexdigest()[:12]
+out=out.replace("const BUILD='__BUILD__'","const BUILD='"+ver+"'")
 open(os.path.join(here,'index.html'),'w').write(out)
+open(os.path.join(here,'version.txt'),'w').write(ver+'\n')
 print(len(out),'bytes')
