@@ -78,10 +78,12 @@ V.live=()=>{ const list=team(); const ps=list.map(p=>{ const e=by(S.entries.filt
 /* kiosk lock: leaving the kiosk needs a manager's PIN, and a page reload stays in the kiosk */
 const KFLAG='pv-team-kiosk';
 const kFlag=v=>{ try{ if(v===undefined)return localStorage.getItem(KFLAG)==='1'; if(v)localStorage.setItem(KFLAG,'1'); else localStorage.removeItem(KFLAG) }catch(e){} return false };
-const kMgrPins=()=>S.people.filter(p=>!p.archived&&isMgr(p)&&p.pin).map(p=>String(p.pin));
-function kGo(){ if(typeof qrEnsureCodes==='function')qrEnsureCodes(); U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
+const kOpener=()=>{ try{ return localStorage.getItem(KFLAG+'-by')||'' }catch(e){ return '' } };
+/* PINs that let you out of the kiosk: every manager's, and the person who opened it on this device */
+const kMgrPins=()=>uniq(S.people.filter(p=>!p.archived&&p.pin&&(isMgr(p)||p.id===kOpener())).map(p=>String(p.pin)));
+function kGo(){ if(typeof qrEnsureCodes==='function')qrEnsureCodes(); try{ if(!U.login&&me())localStorage.setItem(KFLAG+'-by',me().id); else localStorage.removeItem(KFLAG+'-by') }catch(e){} U.wasLogin=U.login; U.kiosk=true; U.kq=null; U.login=false; kFlag(true); const l=$('#login-root'); if(l)l.innerHTML=''; renderKiosk() }
 function kOut(){ if(typeof qrStop==='function')qrStop(); U.kiosk=false; U.kq=null; kFlag(false); clearTimeout(kT); $('#kiosk-root').innerHTML=''; if(U.wasLogin){ U.login=true; U.wasLogin=false } if(U.login)renderLogin() }
-A.kiosk=()=>{ const m=me(); if(!U.login&&m&&isMgr(m)&&!kMgrPins().length){ modal(`<h2>Choose your PIN first</h2><p class="mut">The kiosk locks this device so staff can only clock in and out. You will need your PIN to exit it. 3 to 6 numbers.</p><input id="kspin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="PIN" aria-label="Your PIN" data-enter="kSetPin"><div class="r"><button class="btn" data-a="mclose">Cancel</button><button class="btn pri" data-a="kSetPin">Save and open kiosk</button></div>`); return } kGo() };
+A.kiosk=()=>{ const m=me(); if(!U.login&&m&&!m.pin&&!S.people.some(p=>!p.archived&&isMgr(p)&&p.pin)){ modal(`<h2>Choose your PIN first</h2><p class="mut">The kiosk locks this device so staff can only clock in and out. You will need your PIN to exit it. 3 to 6 numbers.</p><input id="kspin" type="password" inputmode="numeric" maxlength="6" autocomplete="new-password" placeholder="PIN" aria-label="Your PIN" data-enter="kSetPin"><div class="r"><button class="btn" data-a="mclose">Cancel</button><button class="btn pri" data-a="kSetPin">Save and open kiosk</button></div>`); return } kGo() };
 A.kSetPin=()=>{ const v=(($('#kspin')||{}).value||'').trim(); if(!/^\d{3,6}$/.test(v)){ toast('PIN must be 3 to 6 numbers'); return } me().pin=v; closeModal(); commit(); kGo() };
 A.kexit=()=>{ if(!kMgrPins().length){ kOut(); return } U.kq={step:'pin',exit:true,pin:''}; renderKiosk(); kClose(30000) };
 let kT=null;

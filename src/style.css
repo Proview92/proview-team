@@ -858,3 +858,8 @@ table.kx-rt{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640
 .kq-frame{position:absolute;width:min(56vmin,340px);height:min(56vmin,340px);border:4px solid #fff;box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none}
 #kqm{margin:0;text-align:center;font-size:19px;font-weight:700;color:#fff;min-height:28px}
 #kqm.kq-bad{color:#ff8a8a}
+.qr-card{margin:0 0 12px}
+.qr-card .qr-btn{min-height:52px;font-size:16px;padding:0 18px}
+.qr-page{text-align:center;max-width:460px;margin:0 auto}
+.qr-page h2{margin:0 0 4px}
+@media(max-width:600px){ .qr-card .qr-btn{flex:1 0 100%;justify-content:center} }

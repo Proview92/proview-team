@@ -169,7 +169,7 @@ function mergeHubs(items){ const out=[]; const seen=new Set(); items.forEach(n=>
 const navOn=n=>{ if(n.hub){ const h=hubOf(U.page); return !!h&&h.id===n.hub } return U.page===n.k };
 function hubBar(){ const h=hubOf(U.page); if(!h)return ''; const pg=hubPages(h); if(pg.length<2)return ''; return `<div class="tabs hubtabs" role="tablist">${pg.map(([k,l])=>`<button role="tab" aria-selected="${U.page===k}" class="${U.page===k?'on':''}" data-a="go" data-k="${k}">${esc(l)}</button>`).join('')}</div>` }
 const NAVS=[{k:'home',l:'Home',i:'home'},{k:'clock',l:'Time clock',i:'clock'},{k:'mytasks',l:'Tasks',i:'tasks'},{k:'mysheet',l:'Timesheets',i:'doc'}];
-const TITLES={resolve:'To resolve',locations:'Locations',start:'Get started',dash:'Dashboard',timesheets:'Timesheets',rota:'Rota',tasks:'Tasks',live:'Live locations',timeoff:'Time off',reports:'Reports',ai:'Proview AI','s-people':'People','s-users':'Users','s-payslips':'Payslips and P45s','s-tracking':'Time tracking','s-schedules':'Schedules','s-holidays':'Holidays','s-locations':'Locations','s-projects':'Roles','s-company':'Company',home:'Home',clock:'Time clock',mytasks:'Tasks',mysheet:'Timesheets',mypay:'Payslips and P45s',inbox:'Inbox',notifs:'Notifications'};
+const TITLES={myqr:'My QR code',resolve:'To resolve',locations:'Locations',start:'Get started',dash:'Dashboard',timesheets:'Timesheets',rota:'Rota',tasks:'Tasks',live:'Live locations',timeoff:'Time off',reports:'Reports',ai:'Proview AI','s-people':'People','s-users':'Users','s-payslips':'Payslips and P45s','s-tracking':'Time tracking','s-schedules':'Schedules','s-holidays':'Holidays','s-locations':'Locations','s-projects':'Roles','s-company':'Company',home:'Home',clock:'Time clock',mytasks:'Tasks',mysheet:'Timesheets',mypay:'Payslips and P45s',inbox:'Inbox',notifs:'Notifications'};
 function menuFor(m){
   if(isTop(m)){ const out=[]; let grp=null; NAV.forEach(n=>{ if(n.g){grp={g:n.g,c:n.c,items:[]};out.push(grp)} else if(n.k!=='resolve'&&canPage(n.k)){ if(!grp){grp={g:'',items:[]};out.push(grp)} grp.items.push(n)} }); out.forEach(g=>g.items=mergeHubs(g.items)); return out.filter(g=>g.items.length) }
   const items=NAVS.slice(); const g=[{g:'',items}];
@@ -177,6 +177,7 @@ function menuFor(m){
   if(feat(m,'payslips')||S.payslips.some(d=>d.pid===m.id))extra.push({k:'mypay',l:'Payslips',i:'doc'});
   if(feat(m,'people'))extra.push({k:'s-people',l:'People',i:'users'});
   if(!m.noTrack)extra.unshift({k:'mydocs',l:'My documents',i:'doc'});
+  if(!m.noTrack)extra.unshift({k:'myqr',l:'My QR code',i:'qr'});
   const ex=mergeHubs(extra); if(ex.length)g.push({g:'More',items:ex}); return g; }
 
 /* ---------- shell ---------- */
