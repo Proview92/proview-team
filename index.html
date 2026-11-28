@@ -3947,7 +3947,7 @@ A.clUp=()=>clTry(async()=>{ const v=clVals(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.t
 A.clReset=()=>clTry(async()=>{ const v=clVals(); if(!v.email)throw new Error('Enter your email.'); const r=await CL.sb.auth.resetPasswordForEmail(v.email,{redirectTo:location.origin+location.pathname}); if(r.error)throw r.error; clScreen('in',{note:'If that email has an account, a link is on its way.'}) });
 A.clNewPw=()=>clTry(async()=>{ const p=($('#clpw')||{}).value||''; if(p.length<6)throw new Error('The password needs at least 6 characters.'); const r=await CL.sb.auth.updateUser({password:p}); if(r.error)throw r.error; await clAfter() });
 A.clSso=()=>{ location.href='https://dashboard.proviewcrm.co.uk/?app=team&return='+encodeURIComponent(location.origin+location.pathname) };
-A.clOut=async()=>{ try{ await CL.sb.auth.signOut() }catch(e){} clSet('pt-site',''); location.reload() };
+A.clOut=async()=>{ if(CL.site){ lsSet(TKEY(),''); lsSet(MKEY(),''); try{ localStorage.removeItem(CUR) }catch(e){} } try{ await CL.sb.auth.signOut() }catch(e){} clSet('pt-site',''); location.reload() };
 A.clAgain=()=>clTry(clAfter);
 A.clMake=()=>clTry(async()=>{ const n=(($('#clbn')||{}).value||'').trim(); if(n.length<2)throw new Error('Enter your business name.'); const r=await CL.sb.rpc('pt_create_my_business',{p_business:n}); if(r.error)throw r.error; clSet('pt-site',r.data); await clAfter() });
 A.clPick=d=>{ const s=(CL.who.sites||[]).find(x=>x.id===d.id); if(s)clOpen(s) };
@@ -4047,6 +4047,12 @@ async function syncInit(){ const cfg=await clCfg(); if(cfg){ await cloudInit(cfg
     syncTimers() }catch(e){ SYNC.on=false; if(e&&e.message==='code'){ syncLock(); throw e } } }
 /* Cloud mode start: sign in, pick the business, then load its shared data. */
 async function cloudInit(cfg){ const site=await cloudGate(cfg);
+  /* The person-token kept on this device belongs to one email. If a different email signs in on the same device
+     (a shared tablet, a borrowed phone), throw the old token and the old copy of the data away, so nobody opens
+     the app as the previous person. (28 Nov 2026: a staff login opened as the owner on the cafe tablet.) */
+  { const em=String((CL.who&&CL.who.email)||'').toLowerCase(), k='pt-tuser-'+site.id, was=lsGet(k);
+    if(was!==em){ if(lsGet('pt-token-'+site.id)||was){ lsSet('pt-token-'+site.id,''); lsSet('pt-me-'+site.id,''); try{ localStorage.removeItem(KEY+'-c-'+site.id) }catch(e){} }
+      if(was){ clSet('pt-noauto-'+site.id,''); clSet('pt-how-'+site.id,''); try{ localStorage.removeItem('pv-team-kiosk'); localStorage.removeItem('pv-team-kiosk-by') }catch(e){} } lsSet(k,em) } }
   CUR=KEY+'-c-'+site.id; let c=null; try{ c=JSON.parse(localStorage.getItem(CUR)||'null') }catch(e){}
   S=c&&c.v?c:blankData(site.name,'',clName()); S.ui=S.ui||{}; migrate(); SYNC.priv=true;
   try{

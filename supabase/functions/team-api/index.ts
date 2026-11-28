@@ -305,8 +305,9 @@ Deno.serve(async (req) => {
     // ----- everything below needs a signed-in person -----
     const tk = req.headers.get("x-token") || "";
     const th = tk ? await sha(tk) : "";
-    const ss = th ? await db.from("pt_site_sessions").select("pid,exp").eq("token_sha256", th).eq("site", site).maybeSingle() : null;
-    const sess = ss?.data && new Date(ss.data.exp).getTime() > Date.now() ? ss.data : null;
+    const ss = th ? await db.from("pt_site_sessions").select("pid,exp,user_id").eq("token_sha256", th).eq("site", site).maybeSingle() : null;
+    // a person-token only works for the login it was given to: a token left on a shared device is useless to the next email
+    const sess = ss?.data && new Date(ss.data.exp).getTime() > Date.now() && (!ss.data.user_id || ss.data.user_id === user.id) ? ss.data : null;
     let u = sess ? findIn(state, "people", sess.pid) : null;
     if (!u || u.archived) return send({ error: "token" }, 401);
 

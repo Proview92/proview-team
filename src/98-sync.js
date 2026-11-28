@@ -51,6 +51,12 @@ async function syncInit(){ const cfg=await clCfg(); if(cfg){ await cloudInit(cfg
     syncTimers() }catch(e){ SYNC.on=false; if(e&&e.message==='code'){ syncLock(); throw e } } }
 /* Cloud mode start: sign in, pick the business, then load its shared data. */
 async function cloudInit(cfg){ const site=await cloudGate(cfg);
+  /* The person-token kept on this device belongs to one email. If a different email signs in on the same device
+     (a shared tablet, a borrowed phone), throw the old token and the old copy of the data away, so nobody opens
+     the app as the previous person. (28 Nov 2026: a staff login opened as the owner on the cafe tablet.) */
+  { const em=String((CL.who&&CL.who.email)||'').toLowerCase(), k='pt-tuser-'+site.id, was=lsGet(k);
+    if(was!==em){ if(lsGet('pt-token-'+site.id)||was){ lsSet('pt-token-'+site.id,''); lsSet('pt-me-'+site.id,''); try{ localStorage.removeItem(KEY+'-c-'+site.id) }catch(e){} }
+      if(was){ clSet('pt-noauto-'+site.id,''); clSet('pt-how-'+site.id,''); try{ localStorage.removeItem('pv-team-kiosk'); localStorage.removeItem('pv-team-kiosk-by') }catch(e){} } lsSet(k,em) } }
   CUR=KEY+'-c-'+site.id; let c=null; try{ c=JSON.parse(localStorage.getItem(CUR)||'null') }catch(e){}
   S=c&&c.v?c:blankData(site.name,'',clName()); S.ui=S.ui||{}; migrate(); SYNC.priv=true;
   try{

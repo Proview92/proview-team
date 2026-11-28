@@ -61,7 +61,7 @@ A.clUp=()=>clTry(async()=>{ const v=clVals(); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.t
 A.clReset=()=>clTry(async()=>{ const v=clVals(); if(!v.email)throw new Error('Enter your email.'); const r=await CL.sb.auth.resetPasswordForEmail(v.email,{redirectTo:location.origin+location.pathname}); if(r.error)throw r.error; clScreen('in',{note:'If that email has an account, a link is on its way.'}) });
 A.clNewPw=()=>clTry(async()=>{ const p=($('#clpw')||{}).value||''; if(p.length<6)throw new Error('The password needs at least 6 characters.'); const r=await CL.sb.auth.updateUser({password:p}); if(r.error)throw r.error; await clAfter() });
 A.clSso=()=>{ location.href='https://dashboard.proviewcrm.co.uk/?app=team&return='+encodeURIComponent(location.origin+location.pathname) };
-A.clOut=async()=>{ try{ await CL.sb.auth.signOut() }catch(e){} clSet('pt-site',''); location.reload() };
+A.clOut=async()=>{ if(CL.site){ lsSet(TKEY(),''); lsSet(MKEY(),''); try{ localStorage.removeItem(CUR) }catch(e){} } try{ await CL.sb.auth.signOut() }catch(e){} clSet('pt-site',''); location.reload() };
 A.clAgain=()=>clTry(clAfter);
 A.clMake=()=>clTry(async()=>{ const n=(($('#clbn')||{}).value||'').trim(); if(n.length<2)throw new Error('Enter your business name.'); const r=await CL.sb.rpc('pt_create_my_business',{p_business:n}); if(r.error)throw r.error; clSet('pt-site',r.data); await clAfter() });
 A.clPick=d=>{ const s=(CL.who.sites||[]).find(x=>x.id===d.id); if(s)clOpen(s) };
